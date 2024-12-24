@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:ContentDialog
+    x:Class="NeatShift.Views.SettingsDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="Settings"
+    PrimaryButtonText="Save"
+    CloseButtonText="Cancel"
+    DefaultButton="Primary">
+
+    <StackPanel Margin="0,10,0,0">
+        <CheckBox x:Name="CreateRestorePointCheckBox" 
+                 Content="Create system restore point before operations"
+                 IsChecked="{Binding CreateRestorePoint}"
+                 Margin="0,0,0,10"/>
+        
+        <CheckBox x:Name="HideSymbolicLinksCheckBox"
+                 Content="Hide symbolic links after creation"
+                 IsChecked="{Binding HideSymbolicLinks}"
+                 Margin="0,0,0,10"/>
+        
+        <TextBlock Text="Note: Changes will take effect immediately after saving."
+                 TextWrapping="Wrap"
+                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                 Margin="0,10,0,0"/>
+    </StackPanel>
+</ui:ContentDialog> 

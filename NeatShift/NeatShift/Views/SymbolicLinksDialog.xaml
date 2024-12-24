@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:ContentDialog
+    x:Class="NeatShift.Views.SymbolicLinksDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="Symbolic Links Manager"
+    PrimaryButtonText="Close"
+    DefaultButton="Primary"
+    MaxWidth="800">
+
+    <Grid Margin="0,10,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Controls -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+            <CheckBox x:Name="ShowHiddenLinksCheckBox" 
+                     Content="Show hidden links"
+                     IsChecked="True"
+                     Margin="0,0,0,10"/>
+            <CheckBox x:Name="ShowSubdirectoriesCheckBox" 
+                     Content="Include subdirectories"
+                     IsChecked="False"
+                     Margin="0,0,0,10"/>
+            <Button x:Name="RefreshButton"
+                    Content="Refresh"
+                    Click="RefreshButton_Click"
+                    HorizontalAlignment="Left"
+                    Margin="0,0,0,10"/>
+        </StackPanel>
+
+        <!-- Selection Controls -->
+        <StackPanel Grid.Row="1" 
+                    Orientation="Horizontal" 
+                    Margin="0,0,0,10">
+            <CheckBox x:Name="SelectAllCheckBox"
+                     Content="Select All"
+                     Click="SelectAll_Click"
+                     Margin="0,0,10,0"/>
+            <TextBlock x:Name="SelectedCountText"
+                      Text="0 items selected"
+                      VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Links List -->
+        <ListView x:Name="LinksListView" 
+                  Grid.Row="2" 
+                  Height="400"
+                  SelectionMode="Extended"
+                  SelectionChanged="LinksListView_SelectionChanged"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="200">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" 
+                                         TextTrimming="CharacterEllipsis" 
+                                         ToolTip="{Binding Path}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Target" Width="400">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Target}" 
+                                         TextTrimming="CharacterEllipsis" 
+                                         ToolTip="{Binding Target}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Status" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Status}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Action Bar -->
+        <StackPanel Grid.Row="3" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right"
+                    Margin="0,10,0,0">
+            <Button x:Name="ShowInExplorerButton"
+                    Content="Show in Explorer"
+                    Click="ShowInExplorer_Click"
+                    IsEnabled="False"
+                    Margin="0,0,10,0"/>
+            <Button x:Name="ToggleVisibilityButton"
+                    Content="Toggle Visibility"
+                    Click="ToggleVisibility_Click"
+                    IsEnabled="False"
+                    Margin="0,0,10,0"/>
+            <Button x:Name="DeleteButton"
+                    Content="Delete Selected"
+                    Click="Delete_Click"
+                    IsEnabled="False"/>
+        </StackPanel>
+    </Grid>
+</ui:ContentDialog> 
