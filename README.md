@@ -5,10 +5,10 @@ Organize your files without breaking anything. NeatShift is a modern Windows app
 ## Screenshots
 
 ### Light Mode
-![NeatShift Light Mode](light mode.png)
+![NeatShift Light Mode](lightmode.png)
 
 ### Dark Mode
-![NeatShift Dark Mode](dark mode.png)
+![NeatShift Dark Mode](darkmode.png)
 
 ## Features
 
