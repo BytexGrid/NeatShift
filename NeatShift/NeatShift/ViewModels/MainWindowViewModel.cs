@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +15,6 @@ using NeatShift.Services;
 using NeatShift.Views;
 using System.Runtime.Versioning;
 using MessageBox = System.Windows.MessageBox;
-using System.Diagnostics;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace NeatShift.ViewModels
@@ -212,12 +212,21 @@ namespace NeatShift.ViewModels
 
         private bool CanExecuteFileOperations() => !IsOperationInProgress;
 
+        public void AddSourceItem(string path)
+        {
+            var item = new FileSystemItem(path);
+            if (!SourceItems.Any(x => x.Path == item.Path))
+            {
+                SourceItems.Add(item);
+            }
+        }
+
         [RelayCommand]
         private void OpenGitHub()
         {
             Process.Start(new ProcessStartInfo
             {
-                FileName = "https://github.com/yourusername/NeatShift",
+                FileName = "https://github.com/BytexGrid/NeatShift",
                 UseShellExecute = true
             });
         }
@@ -245,6 +254,20 @@ namespace NeatShift.ViewModels
                 }
             };
 
+            await dialog.ShowAsync();
+        }
+
+        [RelayCommand]
+        private async Task ShowContactDialog()
+        {
+            var dialog = new ContactDialog();
+            await dialog.ShowAsync();
+        }
+
+        [RelayCommand]
+        private async Task ShowFeatureRequest()
+        {
+            var dialog = new FeatureRequestDialog();
             await dialog.ShowAsync();
         }
 

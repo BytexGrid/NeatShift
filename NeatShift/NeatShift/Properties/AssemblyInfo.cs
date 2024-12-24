@@ -2,18 +2,18 @@
 //    Copyright(C) 2024
 
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Windows;
 
 // General Information about an assembly is controlled by the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("NeatShift")]
-[assembly: AssemblyDescription("File and folder organization tool with symbolic link support")]
+[assembly: AssemblyDescription("File organization tool with symbolic link support")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("NeatShift")]
+[assembly: AssemblyCompany("BytexGrid")]
 [assembly: AssemblyProduct("NeatShift")]
-[assembly: AssemblyCopyright("Copyright © 2024")]
+[assembly: AssemblyCopyright("Copyright © 2024 BytexGrid")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -36,5 +36,7 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("1.0.0")]
-[assembly: AssemblyFileVersion("1.0.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]

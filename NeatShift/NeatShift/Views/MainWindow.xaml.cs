@@ -19,5 +19,34 @@ namespace NeatShift.Views
             var dialog = new SymbolicLinkInfoDialog();
             await dialog.ShowAsync();
         }
+
+        private void ListView_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files != null && files.Length > 0)
+                {
+                    var vm = (MainWindowViewModel)DataContext;
+                    foreach (string file in files)
+                    {
+                        vm.AddSourceItem(file);
+                    }
+                }
+            }
+        }
+
+        private void ListView_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+            e.Handled = true;
+        }
     }
 } 
