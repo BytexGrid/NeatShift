@@ -241,13 +241,19 @@ namespace NeatShift.ViewModels
                 DefaultButton = ContentDialogButton.Close,
                 Content = new TextBlock
                 {
-                    Text = "NeatShift v1.0.0\n\n" +
+                    Text = "NeatShift v1.1.0\n\n" +
                            "A modern file organization tool with symbolic link support.\n\n" +
                            "Features:\n" +
                            "• Move files and folders while keeping them accessible\n" +
                            "• Create and manage symbolic links\n" +
                            "• System restore point creation\n" +
                            "• Modern Windows 11 style interface\n\n" +
+                           "⚠️ Important Notice:\n" +
+                           "NeatShift is currently in testing phase. While we implement safety measures, please:\n" +
+                           "• Create manual backups or system restore points\n" +
+                           "• Verify symbolic links after moving files\n" +
+                           "• Report any issues through Discord or Telegram\n\n" +
+                           "The software is provided 'as is', without warranty of any kind.\n\n" +
                            "© 2024 NeatShift",
                     TextWrapping = TextWrapping.Wrap,
                     Margin = new Thickness(0, 0, 0, 10)

@@ -16,10 +16,25 @@ Organize your files without breaking anything. NeatShift is a modern Windows app
 ## Installation
 
 1. Download the latest release from the [Releases](https://github.com/BytexGrid/NeatShift/releases) page
-2. Extract the zip file
+2. Extract the zip file (if using the zip version)
 3. Run `NeatShift.exe`
 
-**Note**: Administrator privileges are required for creating symbolic links and system restore points.
+## Administrator Privileges
+
+NeatShift requires administrator privileges for two essential functions:
+
+1. **Creating Symbolic Links**: Windows security model requires elevated privileges to create symbolic links. This is a system-level security requirement to prevent potential misuse of links.
+
+2. **System Restore Points**: Creating system restore points requires access to system protection settings, which is only available with administrator rights.
+
+## ⚠️ Important Disclaimer
+
+NeatShift is currently in testing phase. While we implement safety measures like automatic system restore points, please note:
+
+1. **Manual Backups**: We strongly recommend creating manual system restore points or file backups before using the application
+2. **Testing Phase**: The application is under active development and testing
+3. **No Warranty**: The software is provided "as is", without warranty of any kind
+4. **User Responsibility**: Always verify symbolic links are working as expected after moving files
 
 ## How to Use
 
@@ -31,6 +46,13 @@ Organize your files without breaking anything. NeatShift is a modern Windows app
 
 - Windows 10 or later
 - Administrator privileges
+- No .NET installation required (included in the package)
+
+## Support
+
+Need help or want to request a feature?
+- Join our [Discord](https://discord.gg/tc3AjBRQq9)
+- Contact us on [Telegram](https://t.me/NeatShift)
 
 ## License
 
