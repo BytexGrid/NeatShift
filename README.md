@@ -32,21 +32,6 @@ Organize your files without breaking anything. NeatShift is a modern Windows app
 - Windows 10 or later
 - Administrator privileges
 
-## Development
-
-### Prerequisites
-- Visual Studio 2022
-- .NET 6.0 SDK
-
-### Building
-1. Clone the repository
-2. Open `NeatShift.sln` in Visual Studio
-3. Build the solution
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 ## License
 
 This software is proprietary and confidential. Unauthorized reproduction, distribution, or modification is prohibited. See the [LICENSE](LICENSE) file for details. 
