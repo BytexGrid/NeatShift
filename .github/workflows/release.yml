@@ -30,7 +30,22 @@ jobs:
       
     - name: Publish
       working-directory: ./NeatShift
-      run: dotnet publish "NeatShift/NeatShift.csproj" -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o ../publish
+      run: |
+        dotnet publish "NeatShift/NeatShift.csproj" -c Release -r win-x64 `
+          --self-contained true `
+          -p:PublishSingleFile=true `
+          -p:EnableCompressionInSingleFile=true `
+          -p:IncludeNativeLibrariesForSelfExtract=true `
+          -p:DebugType=None `
+          -p:DebugSymbols=false `
+          -p:PublishReadyToRun=true `
+          -o ../publish
+
+    - name: Copy exe to release
+      run: Copy-Item "publish/NeatShift.exe" -Destination "NeatShift.exe"
+
+    - name: Zip Release
+      run: Compress-Archive -Path "publish/NeatShift.exe" -DestinationPath "NeatShift-Release.zip"
       
     - name: Create Release
       uses: softprops/action-gh-release@v1
@@ -38,7 +53,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         files: |
-          publish/NeatShift.exe
+          NeatShift.exe
+          NeatShift-Release.zip
         draft: false
         prerelease: false
         generate_release_notes: true 
