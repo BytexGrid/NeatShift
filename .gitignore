@@ -18,14 +18,14 @@ runtimes/
 [Rr]eleases/
 x64/
 x86/
-build/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
 bld/
 [Bb]in/
 [Oo]bj/
-[Oo]ut/
-msbuild.log
-msbuild.err
-msbuild.wrn
+[Ll]og/
+[Ll]ogs/
 
 ## Visual Studio cache/options directory
 .vs/
@@ -88,4 +88,47 @@ artifacts/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-!.vscode/extensions.json 
+!.vscode/extensions.json
+
+## ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+## Development files
+DEVELOPMENT_LOG.md
+
+## NuGet
+packages/
+*.nupkg
+*.snupkg
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+## Folder config file
+Desktop.ini
+
+## Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+## VS Code directories
+.vscode/
+
+## Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+## Windows shortcuts
+*.lnk 

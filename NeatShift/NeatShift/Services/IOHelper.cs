@@ -257,26 +257,21 @@ namespace NeatShift.Services
                     File.SetAttributes(path, attributes & ~FileAttributes.ReadOnly);
                 }
 
-                // Use elevated cmd.exe to delete the symbolic link
-                var isDirectory = Directory.Exists(path);
-                var command = isDirectory ? $"rmdir \"{path}\"" : $"del \"{path}\"";
-
-                var startInfo = new ProcessStartInfo
+                // For directories, use Directory.Delete
+                if (Directory.Exists(path))
                 {
-                    FileName = "cmd.exe",
-                    Arguments = $"/c {command}",
-                    UseShellExecute = true, // This is required for elevation
-                    Verb = "runas",         // Request elevation
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden
-                };
+                    Directory.Delete(path);
+                    return true;
+                }
 
-                using var process = Process.Start(startInfo);
-                if (process == null)
-                    return false;
+                // For files, use File.Delete
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                    return true;
+                }
 
-                process.WaitForExit();
-                return process.ExitCode == 0;
+                return false;
             }
             catch (Exception ex)
             {
