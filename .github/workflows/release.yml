@@ -42,6 +42,7 @@ jobs:
           -p:PublishTrimmed=false `
           -p:ApplicationManifest=app.manifest `
           -p:WindowsPackageType=None `
+          -p:IncludeAllContentForSelfExtract=true `
           -o ../publish
 
     - name: Copy exe to release

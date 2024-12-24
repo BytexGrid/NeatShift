@@ -8,7 +8,7 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="NeatShift" Height="600" Width="900"
-        Icon="/icon.ico"
+        Icon="../icon.ico"
         ui:WindowHelper.UseModernWindowStyle="True"
         WindowStartupLocation="CenterScreen">
 
