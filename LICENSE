@@ -1,26 +1,22 @@
-Copyright (c) 2024 NeatShift - All Rights Reserved
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
 
-This software and associated documentation files (the "Software") are proprietary and confidential.
+ Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
 
-The Software is protected by copyright law and international treaties. Unauthorized reproduction, 
-distribution, or modification of this Software, or any portion of it, may result in severe civil 
-and criminal penalties, and will be prosecuted to the maximum extent possible under law.
+                            Preamble
 
-Permission is hereby granted to use the Software for personal or internal business purposes only, 
-subject to the following conditions:
+  The GNU General Public License is a free, copyleft license for
+software and other kinds of works.
 
-1. You may not distribute, sublicense, sell, rent, lease or otherwise make the Software available 
-   to any third party.
+  The licenses for most software and other practical works are designed
+to take away your freedom to share and change the works.  By contrast,
+the GNU General Public License is intended to guarantee your freedom to
+share and change all versions of a program--to make sure it remains free
+software for all its users.  We, the Free Software Foundation, use the
+GNU General Public License for most of our software; it applies also to
+any other work released this way by its authors.  You can apply it to
+your programs, too.
 
-2. You may not modify, adapt, translate, reverse engineer, decompile, disassemble or create 
-   derivative works based on the Software.
-
-3. You may not remove, alter or obscure any proprietary notices in the Software.
-
-4. This license shall automatically terminate if you violate any of these restrictions.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT 
-NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+[... rest of GPL 3.0 text ...] 

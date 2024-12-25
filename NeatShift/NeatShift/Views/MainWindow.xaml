@@ -10,13 +10,15 @@
         Title="NeatShift" Height="600" Width="900"
         Icon="../icon.ico"
         ui:WindowHelper.UseModernWindowStyle="True"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        MinHeight="500" MinWidth="800">
 
     <Window.Resources>
         <Style x:Key="SectionHeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">
             <Setter Property="Margin" Value="0,0,0,10"/>
             <Setter Property="Foreground" Value="{DynamicResource SystemAccentBrush}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
         
         <Style x:Key="FeatureIconStyle" TargetType="ui:SymbolIcon">
@@ -44,13 +46,14 @@
             </Grid.RowDefinitions>
 
             <!-- Top Command Bar -->
-            <ui:CommandBar Grid.Row="0" Margin="0" Background="Transparent">
+            <ui:CommandBar Grid.Row="0" Margin="0,0,0,10" Background="Transparent">
                 <ui:CommandBar.PrimaryCommands>
                     <ui:AppBarButton Icon="Add" Label="Add Files" Command="{Binding AddFilesCommand}"/>
                     <ui:AppBarButton Icon="Folder" Label="Add Folder" Command="{Binding AddFolderCommand}"/>
                     <ui:AppBarSeparator/>
                     <ui:AppBarButton Icon="Setting" Label="Settings" Command="{Binding OpenSettingsCommand}"/>
                     <ui:AppBarButton Icon="Link" Label="View Links" Command="{Binding ViewSymbolicLinksCommand}"/>
+                    <ui:AppBarButton Icon="Refresh" Label="Restore Points" Command="{Binding ManageRestorePointsCommand}"/>
                     <ui:AppBarSeparator/>
                     <ui:AppBarButton Command="{Binding ToggleThemeCommand}"
                                    ToolTipService.ToolTip="Toggle theme">
@@ -67,14 +70,14 @@
             </ui:CommandBar>
 
             <!-- Main Content -->
-            <Grid Grid.Row="1" Margin="0,-10,0,0">
+            <Grid Grid.Row="1" Margin="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" MinWidth="300"/>
+                    <ColumnDefinition Width="*" MinWidth="300"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Left side for User Guide -->
-                <Grid Grid.Column="0" Margin="0,0,40,0">
+                <Grid Grid.Column="0" Margin="0,0,20,0">
                     <ScrollViewer Margin="0">
                         <StackPanel Margin="0">
                             <!-- Welcome Section -->
@@ -83,23 +86,23 @@
                                      Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
                                      FontSize="32"
                                      FontWeight="Bold"
-                                     Margin="0,0,0,15"/>
+                                     Margin="0,0,0,10"/>
 
                             <TextBlock Text="Organize your files without breaking anything"
                                      Style="{StaticResource SubtitleTextBlockStyle}"
                                      Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
                                      FontSize="20"
                                      TextWrapping="Wrap"
-                                     Margin="0,0,0,30"/>
+                                     Margin="0,0,0,20"/>
 
                             <!-- Key Features -->
                             <TextBlock Text="Key Features"
                                      Style="{StaticResource SubtitleTextBlockStyle}"
                                      FontWeight="SemiBold"
                                      Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
-                                     Margin="0,0,0,15"/>
+                                     Margin="0,0,0,10"/>
 
-                            <StackPanel Margin="0,0,0,30">
+                            <StackPanel Margin="0,0,0,20">
                                 <Grid Margin="0,5">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -157,7 +160,7 @@
                                      FontWeight="SemiBold"
                                      Margin="0,0,0,10"/>
 
-                            <ItemsControl Margin="0,0,0,20">
+                            <ItemsControl Margin="0,0,0,15">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Grid Margin="0,10">
@@ -204,11 +207,11 @@
                                 </local:GuideStep>
                             </ItemsControl>
 
-                            <!-- Tips Section -->
+                            <!-- Pro Tips -->
                             <TextBlock Text="Pro Tips"
                                      Style="{StaticResource SubtitleTextBlockStyle}"
                                      FontWeight="SemiBold"
-                                     Margin="0,0,0,10"/>
+                                     Margin="0,0,0,5"/>
 
                             <ItemsControl>
                                 <ItemsControl.ItemTemplate>
@@ -236,7 +239,7 @@
                 </Grid>
 
                 <!-- Right side with Source Files and Destination -->
-                <Grid Grid.Column="1">
+                <Grid Grid.Column="1" Margin="20,0,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
@@ -256,7 +259,6 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             
                             <TextBox Text="{Binding DestinationPath, UpdateSourceTrigger=PropertyChanged}"
@@ -268,38 +270,31 @@
                                     Margin="10,0,0,0"
                                     Content="Browse"
                                     Command="{Binding BrowseDestinationCommand}"/>
-
-                            <Button Grid.Column="2"
-                                    Margin="10,0,0,0"
-                                    Content="Move"
-                                    Command="{Binding MoveCommand}"
-                                    Style="{StaticResource AccentButtonStyle}"
-                                    Padding="20,10"
-                                    IsEnabled="{Binding CanMove}"/>
                         </Grid>
                     </Grid>
 
                     <!-- Source Files List -->
-                    <Grid Grid.Row="1" Grid.Column="1" Margin="20,0,0,0">
+                    <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                        </Grid.RowDefinitions>
                     
-                    <TextBlock Text="Source Files" 
-                             Style="{StaticResource SectionHeaderStyle}"/>
+                        <TextBlock Text="Source Files" 
+                                 Style="{StaticResource SectionHeaderStyle}"/>
                     
-                    <ListView Grid.Row="1" 
-                              ItemsSource="{Binding SourceItems}"
-                              AllowDrop="True"
-                                Drop="ListView_Drop"
-                                DragEnter="ListView_DragEnter"
-                                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                              Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
-                              BorderThickness="1"
-                                BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}">
+                        <ListView Grid.Row="1" 
+                                 ItemsSource="{Binding SourceItems}"
+                                 AllowDrop="True"
+                                 Drop="ListView_Drop"
+                                 DragEnter="ListView_DragEnter"
+                                 DragLeave="ListView_DragLeave"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                                 BorderThickness="1"
+                                 BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}">
                             <ListView.Style>
                                 <Style TargetType="ListView">
                                     <Style.Triggers>
@@ -325,40 +320,58 @@
                                     </Style.Triggers>
                                 </Style>
                             </ListView.Style>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
                                     <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <ui:SymbolIcon Grid.Column="0" 
-                                                 Symbol="{Binding IsDirectory, Converter={StaticResource FileTypeToSymbolConverter}}" 
-                                                 Margin="0,0,10,0"/>
-                                    <TextBlock Grid.Column="1" 
-                                             Text="{Binding Name}" 
-                                             VerticalAlignment="Center"
-                                             ToolTip="{Binding Path}"/>
-                                    <Button Grid.Column="2" 
-                                            Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                            CommandParameter="{Binding}"
-                                            Style="{StaticResource TextBlockButtonStyle}"
-                                            Content="✕"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ui:SymbolIcon Grid.Column="0" 
+                                                     Symbol="{Binding IsDirectory, Converter={StaticResource FileTypeToSymbolConverter}}" 
+                                                     Margin="0,0,10,0"/>
+                                        <TextBlock Grid.Column="1" 
+                                                 Text="{Binding Name}" 
+                                                 VerticalAlignment="Center"
+                                                 ToolTip="{Binding Path}"/>
+                                        <Button Grid.Column="2" 
+                                                Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource TextBlockButtonStyle}"
+                                                Content="✕"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
 
-                        <!-- Action Buttons -->
-                        <StackPanel Grid.Row="2" Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Button Content="Contact Us" 
-                                    Command="{Binding ShowContactDialogCommand}"
-                                    Margin="0,0,10,0"/>
-                            <Button Content="Feature Request" 
-                                    Command="{Binding ShowFeatureRequestCommand}"
-                                    Style="{StaticResource AccentButtonStyle}"/>
-                </StackPanel>
+                        <!-- Bottom Action Bar -->
+                        <Grid Grid.Row="2" Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Move button on the left -->
+                            <Button Grid.Column="0"
+                                   Content="Move"
+                                   Command="{Binding MoveCommand}"
+                                   Style="{StaticResource AccentButtonStyle}"
+                                   Padding="20,10"
+                                   IsEnabled="{Binding CanMove}"/>
+
+                            <!-- Contact and Feature Request buttons on the right -->
+                            <Button Grid.Column="2" 
+                                   Content="Contact Us" 
+                                   Command="{Binding ShowContactDialogCommand}"
+                                   Margin="0,0,10,0"/>
+                            <Button Grid.Column="3" 
+                                   Content="Feature Request" 
+                                   Command="{Binding ShowFeatureRequestCommand}"
+                                   Style="{StaticResource AccentButtonStyle}"/>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>

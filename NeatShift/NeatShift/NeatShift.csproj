@@ -9,13 +9,19 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.0.0</Version>
-    <Authors>NeatShift</Authors>
-    <Company>NeatShift</Company>
+    <Version>1.1.2</Version>
+    <Authors>BytexGrid</Authors>
+    <Company>BytexGrid</Company>
     <Product>NeatShift</Product>
     <Description>File and folder organization tool with symbolic link support</Description>
-    <Copyright>Copyright © 2024</Copyright>
+    <Copyright>Copyright © 2024 BytexGrid</Copyright>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +30,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

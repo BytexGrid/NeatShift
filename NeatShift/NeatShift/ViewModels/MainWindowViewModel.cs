@@ -239,28 +239,72 @@ namespace NeatShift.ViewModels
                 Title = "About NeatShift",
                 CloseButtonText = "Close",
                 DefaultButton = ContentDialogButton.Close,
-                Content = new TextBlock
+                Content = new StackPanel
                 {
-                    Text = "NeatShift v1.1.0\n\n" +
-                           "A modern file organization tool with symbolic link support.\n\n" +
-                           "Features:\n" +
-                           "• Move files and folders while keeping them accessible\n" +
-                           "• Create and manage symbolic links\n" +
-                           "• System restore point creation\n" +
-                           "• Modern Windows 11 style interface\n\n" +
-                           "⚠️ Important Notice:\n" +
-                           "NeatShift is currently in testing phase. While we implement safety measures, please:\n" +
-                           "• Create manual backups or system restore points\n" +
-                           "• Verify symbolic links after moving files\n" +
-                           "• Report any issues through Discord or Telegram\n\n" +
-                           "The software is provided 'as is', without warranty of any kind.\n\n" +
-                           "© 2024 NeatShift",
-                    TextWrapping = TextWrapping.Wrap,
-                    Margin = new Thickness(0, 0, 0, 10)
+                    Children =
+                    {
+                        new TextBlock
+                        {
+                            Text = $"NeatShift v{Version.Current}\n\n" +
+                                   "A modern file organization tool with symbolic link support.\n\n" +
+                                   "Features:\n" +
+                                   "• Move files and folders while keeping them accessible\n" +
+                                   "• Create and manage symbolic links\n" +
+                                   "• System restore point creation\n" +
+                                   "• Modern Windows 11 style interface\n\n" +
+                                   "⚠️ Important Notice:\n" +
+                                   "NeatShift is currently in testing phase. While we implement safety measures, please:\n" +
+                                   "• Create manual backups or system restore points\n" +
+                                   "• Verify symbolic links after moving files\n" +
+                                   "• Report any issues through Discord or Telegram\n\n" +
+                                   "The software is provided 'as is', without warranty of any kind.\n\n" +
+                                   "© 2024 NeatShift",
+                            TextWrapping = TextWrapping.Wrap,
+                            Margin = new Thickness(0, 0, 0, 10)
+                        },
+                        new System.Windows.Controls.Button
+                        {
+                            Content = "Check for Updates",
+                            HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                            Command = new RelayCommand(async () => await CheckForUpdates())
+                        }
+                    }
                 }
             };
 
             await dialog.ShowAsync();
+        }
+
+        private async Task CheckForUpdates()
+        {
+            var updateService = new UpdateService();
+            var (isUpdateAvailable, latestVersion) = await updateService.CheckForUpdates();
+            
+            if (isUpdateAvailable)
+            {
+                var result = MessageBox.Show(
+                    $"A new version ({latestVersion}) is available. Would you like to download it?",
+                    "Update Available",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Information);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "https://github.com/BytexGrid/NeatShift/releases/latest",
+                        UseShellExecute = true
+                    });
+                }
+            }
+            else
+            {
+                MessageBox.Show(
+                    "You are using the latest version.",
+                    "No Updates Available",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
         }
 
         [RelayCommand]
@@ -274,6 +318,13 @@ namespace NeatShift.ViewModels
         private async Task ShowFeatureRequest()
         {
             var dialog = new FeatureRequestDialog();
+            await dialog.ShowAsync();
+        }
+
+        [RelayCommand]
+        private async Task ManageRestorePoints()
+        {
+            var dialog = new RestorePointDialog();
             await dialog.ShowAsync();
         }
 

@@ -22,17 +22,24 @@ namespace NeatShift.Views
 
         private void ListView_Drop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            try
             {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                if (files != null && files.Length > 0)
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
-                    var vm = (MainWindowViewModel)DataContext;
-                    foreach (string file in files)
+                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                    if (files != null && files.Length > 0)
                     {
-                        vm.AddSourceItem(file);
+                        var vm = (MainWindowViewModel)DataContext;
+                        foreach (string file in files)
+                        {
+                            vm.AddSourceItem(file);
+                        }
                     }
                 }
+            }
+            finally
+            {
+                e.Handled = true;
             }
         }
 
@@ -46,6 +53,12 @@ namespace NeatShift.Views
             {
                 e.Effects = DragDropEffects.None;
             }
+            e.Handled = true;
+        }
+
+        private void ListView_DragLeave(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.None;
             e.Handled = true;
         }
     }
