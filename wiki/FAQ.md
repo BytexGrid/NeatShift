@@ -66,12 +66,12 @@ Common causes:
 ### Is it safe to use?
 Yes! NeatShift is:
 1. Open source - code can be reviewed
-2. Published through official GitHub releases
+2. Signed with Sigstore
 3. Creates restore points
 4. Doesn't collect data
 
 ### How can I verify the download?
-Always download from our official [GitHub Releases](https://github.com/BytexGrid/NeatShift/releases) page. See our [Security & Verification](Security-and-Verification) guide for more details.
+See our [Security & Verification](Security-and-Verification) guide for instructions on verifying Sigstore signatures.
 
 ## Support
 

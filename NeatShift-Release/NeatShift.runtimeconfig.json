@@ -1,0 +1,18 @@
+{
+  "runtimeOptions": {
+    "tfm": "net6.0",
+    "includedFrameworks": [
+      {
+        "name": "Microsoft.NETCore.App",
+        "version": "6.0.36"
+      },
+      {
+        "name": "Microsoft.WindowsDesktop.App",
+        "version": "6.0.36"
+      }
+    ],
+    "configProperties": {
+      "System.Reflection.Metadata.MetadataUpdater.IsSupported": false
+    }
+  }
+}
