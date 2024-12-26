@@ -43,6 +43,11 @@ jobs:
           -p:ApplicationManifest=app.manifest `
           -p:WindowsPackageType=None `
           -p:IncludeAllContentForSelfExtract=true `
+          -p:UseAppHost=true `
+          -p:SelfContained=true `
+          -p:EnableUnsafeBinaryFormatterSerialization=false `
+          -p:EnableUnsafeUTF7Encoding=false `
+          -p:InvariantGlobalization=true `
           -o ../publish
 
     - name: Copy exe to release
@@ -53,12 +58,19 @@ jobs:
         Set-Content -Path "publish/NeatShift.runtimeconfig.json" -Value '{
           "runtimeOptions": {
             "tfm": "net6.0-windows",
-            "framework": {
-              "name": "Microsoft.WindowsDesktop.App",
-              "version": "6.0.0"
-            },
+            "includedFrameworks": [
+              {
+                "name": "Microsoft.NETCore.App",
+                "version": "6.0.36"
+              },
+              {
+                "name": "Microsoft.WindowsDesktop.App",
+                "version": "6.0.36"
+              }
+            ],
             "configProperties": {
-              "System.Reflection.Metadata.MetadataUpdater.IsSupported": false
+              "System.Reflection.Metadata.MetadataUpdater.IsSupported": false,
+              "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false
             }
           }
         }'

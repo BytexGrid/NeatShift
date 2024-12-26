@@ -35,4 +35,28 @@
         />
     </dependentAssembly>
   </dependency>
+
+  <dependency>
+    <dependentAssembly>
+      <assemblyIdentity 
+          type="win32" 
+          name="Microsoft.NETCore.App" 
+          version="6.0.0.0" 
+          processorArchitecture="*" 
+          publicKeyToken="7cec85d7bea7798e" 
+          language="*" />
+    </dependentAssembly>
+  </dependency>
+
+  <dependency>
+    <dependentAssembly>
+      <assemblyIdentity 
+          type="win32" 
+          name="Microsoft.WindowsDesktop.App" 
+          version="6.0.0.0" 
+          processorArchitecture="*" 
+          publicKeyToken="7cec85d7bea7798e" 
+          language="*" />
+    </dependentAssembly>
+  </dependency>
 </assembly>
