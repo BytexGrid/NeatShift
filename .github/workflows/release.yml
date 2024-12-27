@@ -18,7 +18,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 6.0.x
         
     - name: Restore dependencies
       working-directory: ./NeatShift
@@ -38,17 +38,11 @@ jobs:
           -p:IncludeNativeLibrariesForSelfExtract=true `
           -p:DebugType=None `
           -p:DebugSymbols=false `
-          -p:PublishReadyToRun=false `
+          -p:PublishReadyToRun=true `
           -p:PublishTrimmed=false `
-          -p:UseAppHost=true `
-          -p:SelfContained=true `
-          -p:RuntimeIdentifier=win-x64 `
+          -p:ApplicationManifest=app.manifest `
           -p:WindowsPackageType=None `
           -p:IncludeAllContentForSelfExtract=true `
-          -p:EnableUnsafeBinaryFormatterSerialization=true `
-          -p:EnableUnsafeUTF7Encoding=true `
-          -p:InvariantGlobalization=false `
-          -p:TargetFramework=net8.0-windows `
           -o ../publish
 
     - name: Copy exe to release
@@ -58,14 +52,13 @@ jobs:
       run: |
         Set-Content -Path "publish/NeatShift.runtimeconfig.json" -Value '{
           "runtimeOptions": {
-            "tfm": "net8.0-windows",
+            "tfm": "net6.0-windows",
             "framework": {
               "name": "Microsoft.WindowsDesktop.App",
-              "version": "8.0.0"
+              "version": "6.0.0"
             },
             "configProperties": {
-              "System.Reflection.Metadata.MetadataUpdater.IsSupported": false,
-              "System.Runtime.TieredCompilation": false
+              "System.Reflection.Metadata.MetadataUpdater.IsSupported": false
             }
           }
         }'
