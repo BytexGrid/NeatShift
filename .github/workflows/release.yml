@@ -48,6 +48,7 @@ jobs:
           -p:EnableUnsafeBinaryFormatterSerialization=true `
           -p:EnableUnsafeUTF7Encoding=true `
           -p:InvariantGlobalization=false `
+          -p:TargetFramework=net6.0-windows `
           -o ../publish
 
     - name: Copy exe to release
