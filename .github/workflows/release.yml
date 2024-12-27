@@ -40,7 +40,9 @@ jobs:
           -p:DebugSymbols=false `
           -p:PublishReadyToRun=true `
           -p:PublishTrimmed=false `
-          -p:ApplicationManifest=app.manifest `
+          -p:UseAppHost=true `
+          -p:SelfContained=true `
+          -p:RuntimeIdentifier=win-x64 `
           -p:WindowsPackageType=None `
           -p:IncludeAllContentForSelfExtract=true `
           -o ../publish
@@ -58,7 +60,8 @@ jobs:
               "version": "6.0.0"
             },
             "configProperties": {
-              "System.Reflection.Metadata.MetadataUpdater.IsSupported": false
+              "System.Reflection.Metadata.MetadataUpdater.IsSupported": false,
+              "System.Runtime.TieredCompilation": false
             }
           }
         }'
