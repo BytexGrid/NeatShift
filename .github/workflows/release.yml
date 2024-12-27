@@ -38,13 +38,16 @@ jobs:
           -p:IncludeNativeLibrariesForSelfExtract=true `
           -p:DebugType=None `
           -p:DebugSymbols=false `
-          -p:PublishReadyToRun=true `
+          -p:PublishReadyToRun=false `
           -p:PublishTrimmed=false `
           -p:UseAppHost=true `
           -p:SelfContained=true `
           -p:RuntimeIdentifier=win-x64 `
           -p:WindowsPackageType=None `
           -p:IncludeAllContentForSelfExtract=true `
+          -p:EnableUnsafeBinaryFormatterSerialization=true `
+          -p:EnableUnsafeUTF7Encoding=true `
+          -p:InvariantGlobalization=false `
           -o ../publish
 
     - name: Copy exe to release
