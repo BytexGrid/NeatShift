@@ -13,6 +13,8 @@
 
 NeatShift is a modern Windows application that helps you organize files and folders while maintaining their accessibility through symbolic links.
 
+NOTE : If you see some contradicting statement in readme or wiki , it is because I use LLMs as English is not my main language. So I request you to please dismiss such errors. Thank you!
+
 ## Screenshots
 
 ### Light Mode

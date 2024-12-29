@@ -1,30 +1,81 @@
 name: Release
 
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+  packages: read   # for package dependencies
+  actions: read    # for checking out code
 
 jobs:
   build:
     runs-on: windows-latest
-    permissions:
-      contents: write
-
+    
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v3.6.0
     
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v3.2.0
       with:
         dotnet-version: 6.0.x
-
+        
+    - name: Restore dependencies
+      working-directory: ./NeatShift
+      run: dotnet restore NeatShift.sln
+      
     - name: Build
+      working-directory: ./NeatShift
+      run: dotnet build NeatShift.sln --configuration Release --no-restore
+      
+    - name: Publish
+      working-directory: ./NeatShift
       run: |
-        dotnet restore
-        dotnet publish NeatShift/NeatShift/NeatShift.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
+        dotnet publish "NeatShift/NeatShift.csproj" -c Release -r win-x64 `
+          --self-contained true `
+          -p:PublishSingleFile=true `
+          -p:EnableCompressionInSingleFile=true `
+          -p:IncludeNativeLibrariesForSelfExtract=true `
+          -p:DebugType=None `
+          -p:DebugSymbols=false `
+          -p:PublishReadyToRun=true `
+          -p:PublishTrimmed=false `
+          -p:ApplicationManifest=app.manifest `
+          -p:WindowsPackageType=None `
+          -p:IncludeAllContentForSelfExtract=true `
+          -o ../publish
 
-    - name: Upload Release Asset
-      uses: softprops/action-gh-release@v1
+    - name: Copy exe to release
+      run: Copy-Item "publish/NeatShift.exe" -Destination "NeatShift.exe"
+
+    - name: Create Runtime Config
+      run: |
+        Set-Content -Path "publish/NeatShift.runtimeconfig.json" -Value '{
+          "runtimeOptions": {
+            "tfm": "net6.0-windows",
+            "framework": {
+              "name": "Microsoft.WindowsDesktop.App",
+              "version": "6.0.0"
+            },
+            "configProperties": {
+              "System.Reflection.Metadata.MetadataUpdater.IsSupported": false
+            }
+          }
+        }'
+
+    - name: Zip Release with Config
+      run: Compress-Archive -Path "publish/*" -DestinationPath "NeatShift-Release.zip"
+      
+    - name: Create Release
+      uses: softprops/action-gh-release@v1.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         files: |
-          ./NeatShift/NeatShift/bin/Release/net6.0-windows/win-x64/publish/NeatShift.exe 
+          NeatShift.exe
+          NeatShift-Release.zip
+        draft: false
+        prerelease: false
+        generate_release_notes: true 
