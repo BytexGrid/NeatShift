@@ -15,7 +15,7 @@ jobs:
     runs-on: windows-latest
     
     steps:
-    - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608
+    - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v3.6.0
     
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -69,7 +69,7 @@ jobs:
       run: Compress-Archive -Path "publish/*" -DestinationPath "NeatShift-Release.zip"
       
     - name: Create Release
-      uses: softprops/action-gh-release@2d55137cf0138d7d00e44ac88164061b5fd25d81
+      uses: softprops/action-gh-release@2d55137cf0138d7d00e44ac88164061b5fd25d81 # v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
