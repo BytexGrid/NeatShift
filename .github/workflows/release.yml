@@ -69,7 +69,7 @@ jobs:
       run: Compress-Archive -Path "publish/*" -DestinationPath "NeatShift-Release.zip"
       
     - name: Create Release
-      uses: softprops/action-gh-release@v1.1.0
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
