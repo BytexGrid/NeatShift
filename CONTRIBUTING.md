@@ -2,16 +2,24 @@
 
 Hey there! Thanks for considering contributing to NeatShift. Whether you're fixing bugs, adding features, or improving documentation, your help makes NeatShift better for everyone.
 
+## Branch Strategy
+
+We use a two-branch system:
+- `main` - stable branch for releases
+- `develop` - branch for active development and contributions
+
+Always create your changes in `develop`, not `main`!
+
 ## Quick Start
 
 1. Fork the repo
 2. Clone your fork: `git clone https://github.com/your-username/NeatShift.git`
-3. Create your feature branch: `git checkout -b cool-new-feature`
+3. Create your feature branch from `develop`: `git checkout develop && git checkout -b cool-new-feature`
 4. Make your changes
 5. Test your changes
 6. Commit: `git commit -m 'Add some feature'`
 7. Push: `git push origin cool-new-feature`
-8. Open a Pull Request
+8. Open a Pull Request targeting the `develop` branch
 
 ## Development Setup
 
@@ -36,21 +44,23 @@ We keep it simple:
 
 ## Making Changes
 
-1. **Keep Changes Small**: Smaller PRs are easier to review and more likely to be merged quickly
-2. **Write Good Commit Messages**: Explain what and why, not how
-3. **Update Documentation**: If you change functionality, update the docs
-4. **Add Tests**: New features should include tests
-5. **Test Your Changes**: Make sure everything still works!
+1. **Always Branch from Develop**: Your changes should be based on the `develop` branch
+2. **Keep Changes Small**: Smaller PRs are easier to review
+3. **Write Good Commit Messages**: Explain what and why, not how
+4. **Update Documentation**: If you change functionality, update the docs
+5. **Add Tests**: New features should include tests
+6. **Test Your Changes**: Make sure everything still works!
 
 ## Pull Request Process
 
-1. Update the README.md if needed
-2. Make sure your code builds clean without warnings
-3. Write a good PR description explaining:
+1. Make sure your PR targets the `develop` branch
+2. Update the README.md if needed
+3. Make sure your code builds clean without warnings
+4. Write a good PR description explaining:
    - What you changed
    - Why you changed it
    - How to test it
-4. Link any related issues
+5. Link any related issues
 
 ## Need Help?
 
@@ -79,7 +89,7 @@ Have an idea? Great! Create an issue and:
 
 1. At least one maintainer will review your PR
 2. We might suggest changes
-3. Once approved, we'll merge it
-4. Your contribution will be part of the next release
+3. Once approved, it will be merged into `develop`
+4. Changes in `develop` will be periodically merged to `main` for releases
 
-Thanks for contributing to NeatShift! 
+Thanks for contributing to NeatShift! 🚀
