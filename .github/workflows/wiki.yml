@@ -18,11 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
         with:
           fetch-depth: 0
 
       - name: Upload Wiki Content
-        uses: SwiftDocOrg/github-wiki-publish-action@v1
+        uses: SwiftDocOrg/github-wiki-publish-action@98d0d21e4c8f4d7c7bef2e2dc8449b4c4c888878
         with:
           path: "wiki"
         env:
