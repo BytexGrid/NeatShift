@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:ContentDialog
+    x:Class="NeatShift.Views.FeatureRequestDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="Request a Feature"
+    PrimaryButtonText="Submit"
+    CloseButtonText="Cancel"
+    DefaultButton="Primary">
+
+    <StackPanel Margin="0,10,0,0">
+        <TextBlock Text="Have an idea for a new feature? Let us know!"
+                 TextWrapping="Wrap"
+                 Margin="0,0,0,20"/>
+
+        <TextBlock Text="Feature Title"
+                 FontWeight="SemiBold"
+                 Margin="0,0,0,5"/>
+        <TextBox x:Name="TitleTextBox"
+                ui:ControlHelper.PlaceholderText="Enter a short title for your feature"
+                Margin="0,0,0,15"/>
+
+        <TextBlock Text="Description"
+                 FontWeight="SemiBold"
+                 Margin="0,0,0,5"/>
+        <TextBox x:Name="DescriptionTextBox"
+                ui:ControlHelper.PlaceholderText="Describe your feature request in detail"
+                TextWrapping="Wrap"
+                AcceptsReturn="True"
+                Height="100"
+                Margin="0,0,0,15"/>
+
+        <TextBlock Text="Use Case"
+                 FontWeight="SemiBold"
+                 Margin="0,0,0,5"/>
+        <TextBox x:Name="UseCaseTextBox"
+                ui:ControlHelper.PlaceholderText="How would this feature be useful?"
+                TextWrapping="Wrap"
+                AcceptsReturn="True"
+                Height="60"/>
+    </StackPanel>
+</ui:ContentDialog> 

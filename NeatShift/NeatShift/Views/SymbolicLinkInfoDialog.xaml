@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:ContentDialog
+    x:Class="NeatShift.Views.SymbolicLinkInfoDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="Understanding Symbolic Links"
+    CloseButtonText="Got it!"
+    DefaultButton="Close">
+
+    <ScrollViewer>
+        <StackPanel Margin="0,10,0,0">
+            <!-- What are Symbolic Links -->
+            <TextBlock Text="What are Symbolic Links?"
+                     Style="{StaticResource SubtitleTextBlockStyle}"
+                     FontWeight="SemiBold"
+                     Margin="0,0,0,10"/>
+            
+            <TextBlock TextWrapping="Wrap" Margin="0,0,0,20">
+                A symbolic link (also known as a symlink) is like a super-powered shortcut. It's a special file that points to another file or folder, but acts as if it were the original. When programs access the symbolic link, they automatically access the target file or folder.
+            </TextBlock>
+
+            <!-- How They Work -->
+            <TextBlock Text="How Do They Work?"
+                     Style="{StaticResource SubtitleTextBlockStyle}"
+                     FontWeight="SemiBold"
+                     Margin="0,0,0,10"/>
+            
+            <TextBlock TextWrapping="Wrap" Margin="0,0,0,20">
+                When NeatShift moves your files:
+                <LineBreak/>
+                1. It moves the actual files to your chosen location
+                <LineBreak/>
+                2. Creates a symbolic link in the original location
+                <LineBreak/>
+                3. Applications continue to work as if nothing changed
+            </TextBlock>
+
+            <!-- Benefits -->
+            <TextBlock Text="Benefits"
+                     Style="{StaticResource SubtitleTextBlockStyle}"
+                     FontWeight="SemiBold"
+                     Margin="0,0,0,10"/>
+            
+            <TextBlock TextWrapping="Wrap" Margin="0,0,0,20">
+                • Organize files without breaking applications
+                <LineBreak/>
+                • Save space by moving large files to other drives
+                <LineBreak/>
+                • Keep your system tidy while maintaining functionality
+                <LineBreak/>
+                • No performance impact - works like original files
+            </TextBlock>
+
+            <!-- Example -->
+            <TextBlock Text="Example"
+                     Style="{StaticResource SubtitleTextBlockStyle}"
+                     FontWeight="SemiBold"
+                     Margin="0,0,0,10"/>
+            
+            <Border Background="{DynamicResource SystemControlBackgroundListLowBrush}"
+                    Padding="15"
+                    CornerRadius="4"
+                    Margin="0,0,0,20">
+                <TextBlock TextWrapping="Wrap">
+                    Imagine you have game saves in:
+                    <LineBreak/>
+                    C:\Games\SaveFiles
+                    <LineBreak/><LineBreak/>
+                    You move them to:
+                    <LineBreak/>
+                    D:\GameBackup\SaveFiles
+                    <LineBreak/><LineBreak/>
+                    NeatShift creates a symbolic link, so the game still works perfectly while the files are actually stored on drive D:.
+                </TextBlock>
+            </Border>
+
+            <!-- Note -->
+            <TextBlock TextWrapping="Wrap" 
+                     Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                     FontStyle="Italic">
+                Note: Creating symbolic links requires administrator privileges, which is why NeatShift asks for elevation when needed.
+            </TextBlock>
+        </StackPanel>
+    </ScrollViewer>
+</ui:ContentDialog> 

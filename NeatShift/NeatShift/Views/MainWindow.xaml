@@ -1,0 +1,478 @@
+<Window x:Class="NeatShift.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:local="clr-namespace:NeatShift.Views"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        mc:Ignorable="d"
+        Title="NeatShift" Height="600" Width="900"
+        Icon="../icon.ico"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        WindowStartupLocation="CenterScreen"
+        MinHeight="500" MinWidth="800">
+
+    <Window.Resources>
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Foreground" Value="{DynamicResource SystemAccentBrush}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        
+        <Style x:Key="FeatureIconStyle" TargetType="ui:SymbolIcon">
+            <Setter Property="Foreground" Value="{DynamicResource SystemAccentBrush}"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+        </Style>
+        
+        <local:BooleanToSymbolConverter x:Key="BooleanToSymbolConverter"/>
+        <local:BooleanToGlyphConverter x:Key="BooleanToGlyphConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <local:BooleanToNumberConverter x:Key="BooleanToNumberConverter"/>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" Opacity="0.05">
+                <GradientStop Color="{DynamicResource SystemAccentColorLight1}" Offset="0"/>
+                <GradientStop Color="Transparent" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        
+        <Grid Margin="20,0,20,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top Command Bar -->
+            <ui:CommandBar Grid.Row="0" Margin="0,0,0,10" Background="Transparent" AutomationProperties.Name="Main Command Bar">
+                <ui:CommandBar.PrimaryCommands>
+                    <ui:AppBarButton Icon="Add" Label="Add Files" Command="{Binding AddFilesCommand}" AutomationProperties.Name="Add Files"/>
+                    <ui:AppBarButton Icon="Folder" Label="Add Folder" Command="{Binding AddFolderCommand}" AutomationProperties.Name="Add Folder"/>
+                    <ui:AppBarSeparator/>
+                    <ui:AppBarButton Icon="Setting" Label="Settings" Command="{Binding OpenSettingsCommand}" AutomationProperties.Name="Settings"/>
+                    <ui:AppBarButton Icon="Link" Label="View Links" Command="{Binding ViewSymbolicLinksCommand}" AutomationProperties.Name="View Links"/>
+                    <ui:AppBarButton Icon="Save" Label="Backup" AutomationProperties.Name="Backup">
+                        <ui:AppBarButton.Flyout>
+                            <ui:Flyout Placement="Bottom">
+                                <StackPanel>
+                                    <Button Command="{Binding ManageNeatSavesCommand}" 
+                                            Margin="0,0,0,8"
+                                            HorizontalAlignment="Stretch">
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:SymbolIcon Symbol="Save" Margin="0,0,12,0"/>
+                                            <TextBlock Text="NeatSaves"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Command="{Binding ManageRestorePointsCommand}"
+                                            HorizontalAlignment="Stretch">
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:SymbolIcon Symbol="Refresh" Margin="0,0,12,0"/>
+                                            <TextBlock Text="Restore Points"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </ui:Flyout>
+                        </ui:AppBarButton.Flyout>
+                    </ui:AppBarButton>
+                    <ui:AppBarSeparator/>
+                    <ui:AppBarButton Command="{Binding ToggleThemeCommand}"
+                                   ToolTipService.ToolTip="Toggle theme"
+                                   AutomationProperties.Name="Toggle Theme">
+                        <ui:AppBarButton.Icon>
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" 
+                                     Glyph="{Binding IsDarkTheme, Converter={StaticResource BooleanToGlyphConverter}, ConverterParameter='&#xE706;,&#xE708;'}"/>
+                        </ui:AppBarButton.Icon>
+                    </ui:AppBarButton>
+                </ui:CommandBar.PrimaryCommands>
+                <ui:CommandBar.SecondaryCommands>
+                    <ui:AppBarButton Icon="Globe" Label="GitHub" Command="{Binding OpenGitHubCommand}" AutomationProperties.Name="GitHub"/>
+                    <ui:AppBarButton Icon="Help" Label="About" Command="{Binding ShowAboutCommand}" AutomationProperties.Name="About"/>
+                </ui:CommandBar.SecondaryCommands>
+            </ui:CommandBar>
+
+            <!-- Main Content -->
+            <Grid Grid.Row="1" Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="300"/>
+                    <ColumnDefinition Width="*" MinWidth="300"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left side for User Guide -->
+                <Grid Grid.Column="0" Margin="0,0,20,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Title and View Switcher -->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Text="Welcome to NeatShift"
+                                 Style="{StaticResource HeaderTextBlockStyle}"
+                                 Grid.Column="0"
+                                 Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                                 FontSize="32"
+                                 FontWeight="Bold"
+                                 Margin="0,0,0,10"/>
+
+                        <StackPanel Grid.Column="1" 
+                                  Orientation="Horizontal" 
+                                  Margin="10,0,0,10">
+                            <ComboBox Width="120"
+                                     Height="32"
+                                     SelectedIndex="{Binding IsGuideSelected, Converter={StaticResource BooleanToNumberConverter}}"
+                                     SelectionChanged="ViewSelector_SelectionChanged"
+                                     AutomationProperties.Name="View Selector">
+                                <ComboBoxItem Content="Guide" AutomationProperties.Name="Guide View"/>
+                                <ComboBoxItem Content="Explorer" AutomationProperties.Name="Explorer View"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Content Area -->
+                    <Grid Grid.Row="1">
+                        <!-- Guide Content -->
+                        <ScrollViewer Visibility="{Binding IsGuideSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel>
+                                <TextBlock Text="Organize your files without breaking anything"
+                                         Style="{StaticResource SubtitleTextBlockStyle}"
+                                         Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                                         FontSize="20"
+                                         TextWrapping="Wrap"
+                                         Margin="0,0,0,20"/>
+
+                                <!-- Key Features -->
+                                <TextBlock Text="Key Features"
+                                         Style="{StaticResource SubtitleTextBlockStyle}"
+                                         FontWeight="SemiBold"
+                                         Margin="0,0,0,10"/>
+
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ui:SymbolIcon Symbol="Accept" 
+                                                Style="{StaticResource FeatureIconStyle}"/>
+                                    <TextBlock Grid.Column="1" 
+                                             TextWrapping="Wrap">
+                                        <Run Text="Move files while maintaining access through "/>
+                                        <Hyperlink Click="SymbolicLink_Click">symbolic links</Hyperlink>
+                                    </TextBlock>
+                                </Grid>
+
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ui:SymbolIcon Symbol="Accept" 
+                                                Style="{StaticResource FeatureIconStyle}"/>
+                                    <TextBlock Grid.Column="1" 
+                                             Text="Backup with NeatSaves and system restore points"
+                                             TextWrapping="Wrap"/>
+                                </Grid>
+
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ui:SymbolIcon Symbol="Accept" 
+                                                Style="{StaticResource FeatureIconStyle}"/>
+                                    <TextBlock Grid.Column="1" 
+                                             Text="Built-in NeatExplorer for easy file browsing"
+                                             TextWrapping="Wrap"/>
+                                </Grid>
+
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ui:SymbolIcon Symbol="Accept" 
+                                                Style="{StaticResource FeatureIconStyle}"/>
+                                    <TextBlock Grid.Column="1" 
+                                             Text="Modern Windows 11 style interface"
+                                             TextWrapping="Wrap"/>
+                                </Grid>
+
+                                <!-- How to Use -->
+                                <TextBlock Text="How to Use"
+                                         Style="{StaticResource SubtitleTextBlockStyle}"
+                                         FontWeight="SemiBold"
+                                         Margin="0,20,0,10"/>
+
+                                <ItemsControl Margin="0,0,0,15">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,10">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Background="{DynamicResource AccentButtonBackground}"
+                                                        Width="24" Height="24"
+                                                        CornerRadius="12"
+                                                        Margin="0,0,10,0">
+                                                    <TextBlock Text="{Binding Number}"
+                                                             Foreground="{DynamicResource AccentButtonForeground}"
+                                                             FontWeight="SemiBold"
+                                                             HorizontalAlignment="Center"
+                                                             VerticalAlignment="Center"/>
+                                                </Border>
+                                                <StackPanel Grid.Column="1">
+                                                    <TextBlock Text="{Binding Title}"
+                                                             FontWeight="SemiBold"
+                                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                                                             Margin="0,0,0,5"/>
+                                                    <TextBlock Text="{Binding Description}"
+                                                             TextWrapping="Wrap"
+                                                             Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                    <local:GuideStep>
+                                        <local:GuideStep.Number>1</local:GuideStep.Number>
+                                        <local:GuideStep.Title>Select Destination</local:GuideStep.Title>
+                                        <local:GuideStep.Description>Choose where you want to move your files. Use Browse or switch to NeatExplorer for easier navigation.</local:GuideStep.Description>
+                                    </local:GuideStep>
+                                    <local:GuideStep>
+                                        <local:GuideStep.Number>2</local:GuideStep.Number>
+                                        <local:GuideStep.Title>Add Files</local:GuideStep.Title>
+                                        <local:GuideStep.Description>Use the 'Add Files' or 'Add Folder' buttons to select items. You can also drag and drop files directly.</local:GuideStep.Description>
+                                    </local:GuideStep>
+                                    <local:GuideStep>
+                                        <local:GuideStep.Number>3</local:GuideStep.Number>
+                                        <local:GuideStep.Title>Review and Move</local:GuideStep.Title>
+                                        <local:GuideStep.Description>Check your selection and click 'Move'. NeatShift will create symbolic links and handle backups automatically.</local:GuideStep.Description>
+                                    </local:GuideStep>
+                                </ItemsControl>
+
+                                <!-- Pro Tips -->
+                                <TextBlock Text="Pro Tips"
+                                         Style="{StaticResource SubtitleTextBlockStyle}"
+                                         FontWeight="SemiBold"
+                                         Margin="0,0,0,5"/>
+
+                                <ItemsControl>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <ui:SymbolIcon Symbol="Important" 
+                                                           Foreground="{DynamicResource SystemAccentBrush}"
+                                                           Margin="0,0,10,0"/>
+                                                <TextBlock Grid.Column="1" 
+                                                         Text="{Binding}"
+                                                         TextWrapping="Wrap"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                    <system:String>Use 'View Links' to manage existing symbolic links</system:String>
+                                    <system:String>Switch to NeatExplorer for advanced file browsing</system:String>
+                                    <system:String>Enable both backup options for maximum safety</system:String>
+                                    <system:String>Dark/Light theme automatically adapts to your Windows settings</system:String>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <!-- Explorer Content -->
+                        <Grid Visibility="{Binding IsExplorerSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <local:FileBrowserControl/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+                <!-- Right side with Source Files and Destination -->
+                <Grid Grid.Column="1" Margin="20,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Destination Section -->
+                    <Grid Grid.Row="0" Margin="0,0,0,20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock Text="Destination" 
+                                     Style="{StaticResource SectionHeaderStyle}"
+                                     Grid.Column="0"/>
+                            
+                            <Button Content="Change Safety Options"
+                                    Command="{Binding ShowSafetyChoiceCommand}"
+                                    Style="{StaticResource AccentButtonStyle}"
+                                    Grid.Column="2"
+                                    Margin="0,0,0,10"/>
+                        </Grid>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBox Text="{Binding DestinationPath, UpdateSourceTrigger=PropertyChanged}"
+                                    ui:ControlHelper.PlaceholderText="Select destination folder"
+                                    IsReadOnly="True"
+                                    ui:ControlHelper.CornerRadius="4"/>
+                            
+                            <Button Grid.Column="1" 
+                                    Margin="10,0,0,0"
+                                    Content="Browse"
+                                    Command="{Binding BrowseDestinationCommand}"/>
+                        </Grid>
+                    </Grid>
+
+                    <!-- Source Files List -->
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                    
+                        <TextBlock Text="Source Files" 
+                                 Style="{StaticResource SectionHeaderStyle}"/>
+                    
+                        <ListView Grid.Row="1"
+                                 ItemsSource="{Binding SourceItems}"
+                                 AllowDrop="True"
+                                 Drop="ListView_Drop"
+                                 DragEnter="ListView_DragEnter"
+                                 DragLeave="ListView_DragLeave"
+                                 Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                                 BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                                 BorderThickness="1"
+                                 ScrollViewer.CanContentScroll="False"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListView.Style>
+                                <Style TargetType="ListView">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SourceItems.Count}" Value="0">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+                                                        <Border Background="{TemplateBinding Background}"
+                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                                            <TextBlock Text="Drag and drop files here or use the buttons above"
+                                                                     HorizontalAlignment="Center"
+                                                                     VerticalAlignment="Center"
+                                                                     Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                                                     TextWrapping="Wrap"
+                                                                     TextAlignment="Center"
+                                                                     Margin="20"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListView.Style>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ui:SymbolIcon Grid.Column="0" 
+                                                     Symbol="{Binding IsDirectory, Converter={StaticResource FileTypeToSymbolConverter}}" 
+                                                     Margin="0,0,10,0"/>
+                                        <TextBlock Grid.Column="1" 
+                                                 Text="{Binding Name}" 
+                                                 VerticalAlignment="Center"
+                                                 ToolTip="{Binding Path}"/>
+                                        <Button Grid.Column="2" 
+                                                Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource TextBlockButtonStyle}"
+                                                Content="✕"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <!-- NeatSaves Management Block -->
+                        <local:NeatSavesManagementBlock Grid.Row="2"
+                                                      DataContext="{Binding NeatSavesManagement}"
+                                                      Visibility="{Binding DataContext.ShowNeatSavesManagement, 
+                                                           RelativeSource={RelativeSource AncestorType=Window}, 
+                                                           Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                        <!-- Bottom Action Bar -->
+                        <Grid Grid.Row="2" Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Move button on the left -->
+                            <Button Grid.Column="0"
+                                   Content="Move"
+                                   Command="{Binding MoveCommand}"
+                                   Style="{StaticResource AccentButtonStyle}"
+                                   Padding="20,10"
+                                   IsEnabled="{Binding CanMove}"/>
+
+                            <!-- Contact and Feature Request buttons on the right -->
+                            <Button Grid.Column="2" 
+                                   Content="Contact Us" 
+                                   Command="{Binding ShowContactDialogCommand}"
+                                   Margin="0,0,10,0"/>
+                            <Button Grid.Column="3" 
+                                   Content="Feature Request" 
+                                   Command="{Binding ShowFeatureRequestCommand}"
+                                   Style="{StaticResource AccentButtonStyle}"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <!-- Status Bar -->
+            <Grid Grid.Row="2" Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Text="{Binding StatusMessage}" 
+                         VerticalAlignment="Center"/>
+                
+                <ProgressBar Grid.Column="1" 
+                           Width="200" 
+                           Height="2"
+                           Value="{Binding ProgressValue}"
+                           Visibility="{Binding IsOperationInProgress, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window> 

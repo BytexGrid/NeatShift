@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl x:Class="NeatShift.Views.NeatSavesManagementBlock"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.modernwpf.com/2019">
+    
+    <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+            BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            BorderThickness="1"
+            CornerRadius="4"
+            Padding="15"
+            Margin="0,10,0,0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ui:SymbolIcon Symbol="Save" 
+                             Margin="0,0,10,0"
+                             Foreground="{DynamicResource SystemControlForegroundAccentBrush}"/>
+                
+                <TextBlock Grid.Column="1" 
+                         Text="NeatSaves Backup"
+                         Style="{StaticResource SubtitleTextBlockStyle}"
+                         FontWeight="SemiBold"
+                         VerticalAlignment="Center"/>
+
+                <Button Grid.Column="2"
+                        Content="Manage"
+                        Style="{StaticResource AccentButtonStyle}"
+                        Command="{Binding ManageNeatSavesCommand}"
+                        Padding="20,5"/>
+            </Grid>
+
+            <!-- Content -->
+            <StackPanel Grid.Row="1" Margin="0,10,0,0">
+                <TextBlock Text="Your files have been backed up with NeatSaves"
+                         TextWrapping="Wrap"/>
+                
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Text="Source: "
+                             FontWeight="SemiBold"
+                             Margin="0,0,5,0"/>
+                    <TextBlock Grid.Column="1"
+                             Text="{Binding SourcePath}"
+                             TextWrapping="Wrap"/>
+                </Grid>
+
+                <Grid Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Text="Destination: "
+                             FontWeight="SemiBold"
+                             Margin="0,0,5,0"/>
+                    <TextBlock Grid.Column="1"
+                             Text="{Binding DestinationPath}"
+                             TextWrapping="Wrap"/>
+                </Grid>
+            </StackPanel>
+
+            <!-- Actions -->
+            <StackPanel Grid.Row="2" 
+                      Orientation="Horizontal"
+                      Margin="0,15,0,0"
+                      HorizontalAlignment="Right">
+                <Button Content="Restore Files"
+                        Command="{Binding RestoreFilesCommand}"
+                        Style="{StaticResource DefaultButtonStyle}"
+                        Margin="0,0,10,0"/>
+                <Button Content="Delete Backup"
+                        Command="{Binding DeleteBackupCommand}"
+                        Style="{StaticResource DefaultButtonStyle}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl> 

@@ -1,0 +1,361 @@
+<Window
+    x:Class="NeatShift.Views.SafetyChoiceDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="Choose Your Safety Net"
+    Width="1200" Height="650"
+    WindowStartupLocation="CenterOwner"
+    WindowStyle="None"
+    AllowsTransparency="True"
+    Background="Transparent"
+    ResizeMode="NoResize">
+
+    <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+            BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+            BorderThickness="1"
+            CornerRadius="8"
+            Margin="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title Bar -->
+            <Border Grid.Row="0" 
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                    BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                    BorderThickness="0,0,0,1"
+                    CornerRadius="8,8,0,0"
+                    MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid Height="48">
+                    <TextBlock Text="Choose Your Safety Net"
+                             Style="{StaticResource SubtitleTextBlockStyle}"
+                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                             VerticalAlignment="Center"
+                             Margin="20,0"/>
+                    <Button Content="✕"
+                            Click="CloseButton_Click"
+                            Style="{StaticResource TextBlockButtonStyle}"
+                            Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="20,0"
+                            FontSize="16"/>
+                </Grid>
+            </Border>
+
+            <!-- Main Content -->
+            <Grid Grid.Row="1" Margin="30">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Three Option Boxes -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,30">
+                    <!-- NeatSaves Box -->
+                    <Border Width="340"
+                           Background="{DynamicResource SystemControlBackgroundAltHighBrush}" 
+                           BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                           BorderThickness="1" 
+                           CornerRadius="8"
+                           Padding="20"
+                           Margin="0,0,15,0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
+                                <ui:SymbolIcon Symbol="Save" 
+                                             Margin="0,0,10,0"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                <TextBlock Text="NeatSaves Only" 
+                                         Style="{StaticResource SubtitleTextBlockStyle}" 
+                                         FontSize="18"
+                                         Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                            </StackPanel>
+                            <StackPanel Margin="10,0">
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <TextBlock Text="&#xE945;" 
+                                             FontFamily="Segoe Fluent Icons"
+                                             FontSize="16"
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,10,0"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                    <TextBlock Text="Lightning fast" 
+                                             VerticalAlignment="Center"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <ui:SymbolIcon Symbol="Share" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                    <TextBlock Text="Works across drives" 
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <ui:SymbolIcon Symbol="Download" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                    <TextBlock Text="Minimal space usage" 
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <ui:SymbolIcon Symbol="Back" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                    <TextBlock Text="Quick undo operations" 
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <ui:SymbolIcon Symbol="Important" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                                    <TextBlock Text="Note:" 
+                                             FontWeight="SemiBold"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4,0,12">
+                                    <ui:SymbolIcon Symbol="Cancel" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="Red"/>
+                                    <TextBlock Text="Files must be unmodified" 
+                                             Foreground="Red"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <RadioButton Content="Use NeatSaves" 
+                                       IsChecked="{Binding UseNeatSavesOnly}" 
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- System Restore Box -->
+                    <Border Width="340"
+                           Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                           BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                           BorderThickness="1"
+                           CornerRadius="8"
+                           Padding="20"
+                           Margin="15,0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
+                                <ui:SymbolIcon Symbol="Refresh" 
+                                             Margin="0,0,10,0"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                <TextBlock Text="System Restore Only" 
+                                         Style="{StaticResource SubtitleTextBlockStyle}" 
+                                         FontSize="18"
+                                         Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                            </StackPanel>
+                            <StackPanel Margin="10,0">
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <TextBlock Text="&#xEA18;" 
+                                             FontFamily="Segoe Fluent Icons"
+                                             FontSize="16"
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,10,0"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                    <TextBlock Text="Full system backup" 
+                                             VerticalAlignment="Center"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <ui:SymbolIcon Symbol="Home" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                    <TextBlock Text="Windows native" 
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <TextBlock Text="&#xEA18;" 
+                                             FontFamily="Segoe Fluent Icons"
+                                             FontSize="16"
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,10,0"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                    <TextBlock Text="Protects all changes" 
+                                             VerticalAlignment="Center"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <ui:SymbolIcon Symbol="World" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                    <TextBlock Text="System-wide safety" 
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <ui:SymbolIcon Symbol="Cancel" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="Red"/>
+                                    <TextBlock Text="C: drive only" 
+                                             Foreground="Red"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4,0,12">
+                                    <ui:SymbolIcon Symbol="Cancel" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="Red"/>
+                                    <TextBlock Text="Uses more space" 
+                                             Foreground="Red"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <RadioButton Content="Use System Restore" 
+                                       IsChecked="{Binding UseSystemRestoreOnly}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Both Box -->
+                    <Border Width="340"
+                           Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                           BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                           BorderThickness="1"
+                           CornerRadius="8"
+                           Padding="20"
+                           Margin="15,0,0,0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
+                                <ui:SymbolIcon Symbol="AllApps" 
+                                             Margin="0,0,10,0"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                <TextBlock Text="Use Both (Recommended)" 
+                                         Style="{StaticResource SubtitleTextBlockStyle}" 
+                                         FontSize="18"
+                                         Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                            </StackPanel>
+                            <StackPanel Margin="10,0">
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <TextBlock Text="&#xEA18;" 
+                                             FontFamily="Segoe Fluent Icons"
+                                             FontSize="16"
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,10,0"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                    <TextBlock Text="Maximum protection" 
+                                             VerticalAlignment="Center"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <ui:SymbolIcon Symbol="Share" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                    <TextBlock Text="Works across drives" 
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <ui:SymbolIcon Symbol="Sync" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                    <TextBlock Text="Flexible recovery" 
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <TextBlock Text="&#xED54;" 
+                                             FontFamily="Segoe Fluent Icons"
+                                             FontSize="16"
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,10,0"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                    <TextBlock Text="Best of both worlds" 
+                                             VerticalAlignment="Center"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <ui:SymbolIcon Symbol="Cancel" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="Red"/>
+                                    <TextBlock Text="Takes more time" 
+                                             Foreground="Red"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,4,0,12">
+                                    <ui:SymbolIcon Symbol="Cancel" 
+                                                 Margin="0,0,10,0"
+                                                 Foreground="Red"/>
+                                    <TextBlock Text="Uses most space" 
+                                             Foreground="Red"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <RadioButton Content="Use Both" 
+                                       IsChecked="{Binding UseBoth}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Quick Guide Section -->
+                <Border Grid.Row="1"
+                        Background="{DynamicResource SystemControlBackgroundListLowBrush}"
+                        BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                        BorderThickness="1" 
+                        CornerRadius="8" 
+                        Padding="20"
+                        Margin="0,20,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <ui:SymbolIcon Symbol="Important" 
+                                     Margin="0,0,15,0" 
+                                     Foreground="{DynamicResource SystemAccentBrush}"/>
+                        
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Quick Guide" 
+                                     FontWeight="SemiBold" 
+                                     FontSize="16" 
+                                     Margin="0,0,0,8"
+                                     Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                            <TextBlock TextWrapping="Wrap"
+                                     Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}">
+                                <Run Text="• "/>
+                                <Run Text="NeatSaves" FontWeight="SemiBold"/>
+                                <Run Text=": Perfect for everyday file management - fast and space-efficient"/>
+                                <LineBreak/>
+                                <Run Text="• "/>
+                                <Run Text="System Restore" FontWeight="SemiBold"/>
+                                <Run Text=": Ideal when moving system-critical files on C: drive"/>
+                                <LineBreak/>
+                                <Run Text="• "/>
+                                <Run Text="Both" FontWeight="SemiBold"/>
+                                <Run Text=": Recommended for maximum safety when moving important files"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Bottom Bar -->
+            <Grid Grid.Row="2" 
+                  Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                  Height="64">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Remember Choice -->
+                <CheckBox Content="Remember my choice and don't ask again"
+                         IsChecked="{Binding RememberChoice}"
+                         Margin="20,0,0,0"
+                         VerticalAlignment="Center"/>
+
+                <!-- Action Buttons -->
+                <StackPanel Grid.Column="1" 
+                          Orientation="Horizontal" 
+                          HorizontalAlignment="Right"
+                          Margin="20,0">
+                    <Button Content="Cancel"
+                            Click="CancelButton_Click"
+                            Style="{StaticResource DefaultButtonStyle}"
+                            Margin="0,0,10,0"
+                            MinWidth="100"/>
+                    <Button Content="Continue"
+                            Click="ContinueButton_Click"
+                            Style="{StaticResource AccentButtonStyle}"
+                            MinWidth="100"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</Window> 

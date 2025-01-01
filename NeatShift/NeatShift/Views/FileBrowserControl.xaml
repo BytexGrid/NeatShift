@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl x:Class="NeatShift.Views.FileBrowserControl"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:ui="http://schemas.modernwpf.com/2019"
+            xmlns:local="clr-namespace:NeatShift.Views">
+    
+    <UserControl.Resources>
+        <local:SortColumnVisibilityConverter x:Key="SortColumnVisibilityConverter"/>
+        <local:BooleanToArrowConverter x:Key="BooleanToArrowConverter"/>
+        <local:BooleanToViewIconConverter x:Key="BooleanToViewIconConverter"/>
+        <local:BooleanToInverseVisibilityConverter x:Key="BooleanToInverseVisibilityConverter"/>
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Navigation Bar -->
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Navigation Buttons -->
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding NavigateBackCommand}"
+                        IsEnabled="{Binding CanNavigateBack}"
+                        Padding="8,4"
+                        Margin="0,0,4,0"
+                        AutomationProperties.Name="Navigate Back"
+                        ToolTip="Back">
+                    <TextBlock Text="&#xE72B;"
+                             FontFamily="Segoe MDL2 Assets"
+                             FontSize="16"
+                             AutomationProperties.Name="Back Arrow"/>
+                </Button>
+                <Button Command="{Binding NavigateForwardCommand}"
+                        IsEnabled="{Binding CanNavigateForward}"
+                        Padding="8,4"
+                        Margin="0,0,4,0"
+                        AutomationProperties.Name="Navigate Forward"
+                        ToolTip="Forward">
+                    <TextBlock Text="&#xE72A;"
+                             FontFamily="Segoe MDL2 Assets"
+                             FontSize="16"
+                             AutomationProperties.Name="Forward Arrow"/>
+                </Button>
+                <Button Command="{Binding NavigateUpCommand}"
+                        Padding="8,4"
+                        Margin="0,0,4,0"
+                        AutomationProperties.Name="Navigate Up"
+                        ToolTip="Up">
+                    <TextBlock Text="&#xE74A;"
+                             FontFamily="Segoe MDL2 Assets"
+                             FontSize="16"
+                             AutomationProperties.Name="Up Arrow"/>
+                </Button>
+                <Button Command="{Binding ToggleViewCommand}"
+                        Padding="8,4"
+                        Margin="0,0,4,0"
+                        AutomationProperties.Name="Toggle View Mode"
+                        ToolTip="Change view">
+                    <TextBlock Text="{Binding IsGridView, Converter={StaticResource BooleanToViewIconConverter}}"
+                             FontFamily="Segoe MDL2 Assets"
+                             FontSize="16"
+                             AutomationProperties.Name="View Mode Icon"/>
+                </Button>
+                
+                <!-- Quick Access Button -->
+                <Button Padding="8,4"
+                        Margin="0,0,4,0"
+                        AutomationProperties.Name="Quick Access Menu"
+                        ToolTip="Quick Access"
+                        Click="QuickAccess_Click">
+                    <Button.Content>
+                        <TextBlock Text="&#xE8A1;"
+                                 FontFamily="Segoe MDL2 Assets"
+                                 FontSize="16"
+                                 AutomationProperties.Name="Clock Icon"/>
+                    </Button.Content>
+                    <Button.ContextMenu>
+                        <ContextMenu x:Name="QuickAccessMenu">
+                            <MenuItem Header="Recent Locations" IsEnabled="False" 
+                                    FontWeight="SemiBold"/>
+                            <Separator/>
+                            <MenuItem Header="Clear Recent Locations"
+                                    Command="{Binding ClearRecentLocationsCommand}"/>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+            </StackPanel>
+
+            <!-- Breadcrumb Navigation -->
+            <Border Grid.Column="1" 
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                    BorderBrush="{DynamicResource SystemControlBackgroundBaseMediumBrush}"
+                    BorderThickness="1"
+                    CornerRadius="2"
+                    MouseDown="Breadcrumb_MouseDown">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Path Display -->
+                    <ItemsControl ItemsSource="{Binding PathSegments}"
+                                Margin="8,4"
+                                Visibility="{Binding IsEditingPath, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
+                                Panel.ZIndex="1">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="{Binding Name}"
+                                            Command="{Binding DataContext.NavigateToSegmentCommand, 
+                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding Path}"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Padding="4,2"
+                                            Margin="0,0,4,0"
+                                            Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <TextBlock Text="›"
+                                             Margin="0,0,4,0"
+                                             VerticalAlignment="Center"
+                                             Foreground="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"
+                                             Visibility="{Binding IsLast, Converter={StaticResource BooleanToInverseVisibilityConverter}}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- Path Edit Box -->
+                    <TextBox Grid.Column="0"
+                            x:Name="PathTextBox"
+                            Text="{Binding CurrentPath, UpdateSourceTrigger=PropertyChanged}"
+                            Margin="8,4"
+                            VerticalAlignment="Center"
+                            Visibility="{Binding IsEditingPath, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            KeyDown="PathTextBox_KeyDown"/>
+
+                    <!-- Toggle Selection Mode Button -->
+                    <Button Grid.Column="1"
+                            Margin="0,4,8,4"
+                            Padding="8,4"
+                            Command="{Binding ToggleSelectionModeCommand}"
+                            ToolTip="Toggle Selection Mode">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelectionMode}" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundListLowBrush}"/>
+                                    </DataTrigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundListMediumBrush}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <TextBlock Text="&#xE762;"
+                                 FontFamily="Segoe MDL2 Assets"
+                                 FontSize="14">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelectionMode}" Value="True">
+                                            <Setter Property="Foreground" Value="{DynamicResource SystemAccentBrush}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Content Area -->
+        <Grid Grid.Row="1">
+            <!-- List View -->
+            <ListView x:Name="FileListView"
+                     ItemsSource="{Binding Items}"
+                     SelectedItem="{Binding SelectedItem}"
+                     SelectionMode="{Binding IsSelectionMode, Converter={StaticResource BooleanToSelectionModeConverter}}"
+                     SelectionChanged="ListView_SelectionChanged"
+                     MouseDoubleClick="ListView_MouseDoubleClick"
+                     KeyDown="ListView_KeyDown"
+                     Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                     BorderThickness="1"
+                     BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                     Visibility="{Binding IsGridView, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+                <ListView.Resources>
+                    <!-- Header Style -->
+                    <Style x:Key="HeaderContainerStyle" TargetType="GridViewColumnHeader">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Padding" Value="8,8,8,8"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundListLowBrush}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <!-- Column Header Text Style -->
+                    <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                    </Style>
+                </ListView.Resources>
+
+                <ListView.View>
+                    <GridView AllowsColumnReorder="True" ColumnHeaderContainerStyle="{StaticResource HeaderContainerStyle}">
+                        <!-- Name Column -->
+                        <GridViewColumn Header="Name" Width="300">
+                            <GridViewColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="16"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding}"
+                                                 Style="{StaticResource HeaderTextStyle}"/>
+                                        <Path Grid.Column="1" 
+                                              Width="8" Height="8"
+                                              Margin="4,0,4,0"
+                                              Stretch="Uniform"
+                                              Data="{Binding DataContext.SortAscending, RelativeSource={RelativeSource AncestorType=ListView}, 
+                                                    Converter={StaticResource BooleanToArrowConverter}}"
+                                              Fill="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                              Visibility="{Binding DataContext.SortColumn, RelativeSource={RelativeSource AncestorType=ListView}, 
+                                                        Converter={StaticResource SortColumnVisibilityConverter}, ConverterParameter=Name}"/>
+                                        <Grid.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" 
+                                                        Command="{Binding DataContext.SortCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                        CommandParameter="Name"/>
+                                        </Grid.InputBindings>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.HeaderTemplate>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="{Binding Icon}" 
+                                               Width="16" Height="16" 
+                                               Margin="0,0,8,0"
+                                               VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1" 
+                                                 Text="{Binding Name}"
+                                                 VerticalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        
+                        <!-- Type Column -->
+                        <GridViewColumn Header="Type" Width="150">
+                            <GridViewColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="16"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding}"
+                                                 Style="{StaticResource HeaderTextStyle}"/>
+                                        <Path Grid.Column="1" 
+                                              Width="8" Height="8"
+                                              Margin="4,0,4,0"
+                                              Stretch="Uniform"
+                                              Data="{Binding DataContext.SortAscending, RelativeSource={RelativeSource AncestorType=ListView}, 
+                                                    Converter={StaticResource BooleanToArrowConverter}}"
+                                              Fill="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                              Visibility="{Binding DataContext.SortColumn, RelativeSource={RelativeSource AncestorType=ListView}, 
+                                                        Converter={StaticResource SortColumnVisibilityConverter}, ConverterParameter=Type}"/>
+                                        <Grid.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" 
+                                                        Command="{Binding DataContext.SortCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                        CommandParameter="Type"/>
+                                        </Grid.InputBindings>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.HeaderTemplate>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Type}" 
+                                             VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        
+                        <!-- Size Column -->
+                        <GridViewColumn Header="Size" Width="100">
+                            <GridViewColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="16"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding}"
+                                                 Style="{StaticResource HeaderTextStyle}"/>
+                                        <Path Grid.Column="1" 
+                                              Width="8" Height="8"
+                                              Margin="4,0,4,0"
+                                              Stretch="Uniform"
+                                              Data="{Binding DataContext.SortAscending, RelativeSource={RelativeSource AncestorType=ListView}, 
+                                                    Converter={StaticResource BooleanToArrowConverter}}"
+                                              Fill="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                              Visibility="{Binding DataContext.SortColumn, RelativeSource={RelativeSource AncestorType=ListView}, 
+                                                        Converter={StaticResource SortColumnVisibilityConverter}, ConverterParameter=Size}"/>
+                                        <Grid.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" 
+                                                        Command="{Binding DataContext.SortCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                        CommandParameter="Size"/>
+                                        </Grid.InputBindings>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.HeaderTemplate>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Size}" 
+                                             VerticalAlignment="Center"
+                                             HorizontalAlignment="Right"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        
+                        <!-- Date Modified Column -->
+                        <GridViewColumn Header="Date Modified" Width="150">
+                            <GridViewColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="16"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding}"
+                                                 Style="{StaticResource HeaderTextStyle}"/>
+                                        <Path Grid.Column="1" 
+                                              Width="8" Height="8"
+                                              Margin="4,0,4,0"
+                                              Stretch="Uniform"
+                                              Data="{Binding DataContext.SortAscending, RelativeSource={RelativeSource AncestorType=ListView}, 
+                                                    Converter={StaticResource BooleanToArrowConverter}}"
+                                              Fill="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                              Visibility="{Binding DataContext.SortColumn, RelativeSource={RelativeSource AncestorType=ListView}, 
+                                                        Converter={StaticResource SortColumnVisibilityConverter}, ConverterParameter=DateModified}"/>
+                                        <Grid.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" 
+                                                        Command="{Binding DataContext.SortCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                        CommandParameter="DateModified"/>
+                                        </Grid.InputBindings>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.HeaderTemplate>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DateModified}" 
+                                             VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                
+                <!-- Item Style -->
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Padding" Value="8,6"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundListLowBrush}"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundListLowBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundListMediumBrush}"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="True"/>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListMediumBrush}"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentBrushLight1}"/>
+                            </MultiTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+
+            <!-- Grid View -->
+            <ListView ItemsSource="{Binding Items}"
+                     SelectedItem="{Binding SelectedItem}"
+                     SelectionMode="Single"
+                     MouseDoubleClick="ListView_MouseDoubleClick"
+                     Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                     BorderThickness="1"
+                     BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     Visibility="{Binding IsGridView, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" 
+                                  Width="{Binding (FrameworkElement.ActualWidth), 
+                                          RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
+                                  ItemWidth="120"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="100" Height="100" Margin="4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="60"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Image Source="{Binding Icon}" 
+                                   Width="32" Height="32"
+                                   Margin="0,10,0,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Row="1"
+                                     Text="{Binding Name}"
+                                     TextAlignment="Center"
+                                     TextWrapping="Wrap"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center"
+                                     Margin="4,0"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="Margin" Value="2"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundListLowBrush}"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundListLowBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource SystemAccentBrushLight1}"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </Grid>
+    </Grid>
+</UserControl> 

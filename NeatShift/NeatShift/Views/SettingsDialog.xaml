@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:ContentDialog
+    x:Class="NeatShift.Views.SettingsDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="Settings"
+    PrimaryButtonText="Save"
+    CloseButtonText="Cancel"
+    DefaultButton="Primary">
+
+    <StackPanel Margin="0,10,0,0">
+        <!-- Safety Options -->
+        <TextBlock Text="Safety Options"
+                 Style="{StaticResource SubtitleTextBlockStyle}"
+                 FontWeight="SemiBold"
+                 Margin="0,0,0,10"/>
+
+        <CheckBox x:Name="CreateRestorePointCheckBox" 
+                 Content="Create system restore point before operations"
+                 IsChecked="{Binding CreateRestorePoint}"
+                 Margin="0,0,0,10"/>
+        
+        <CheckBox x:Name="UseNeatSavesCheckBox"
+                 Content="Use NeatSaves for file backup and recovery"
+                 IsChecked="{Binding UseNeatSaves}"
+                 Margin="0,0,0,10"/>
+
+        <!-- File Operation Options -->
+        <TextBlock Text="File Operation Options"
+                 Style="{StaticResource SubtitleTextBlockStyle}"
+                 FontWeight="SemiBold"
+                 Margin="0,10,0,10"/>
+        
+        <CheckBox x:Name="HideSymbolicLinksCheckBox"
+                 Content="Hide symbolic links after creation"
+                 IsChecked="{Binding HideSymbolicLinks}"
+                 Margin="0,0,0,10"/>
+
+        <!-- NeatSaves Options -->
+        <TextBlock Text="NeatSaves Options"
+                 Style="{StaticResource SubtitleTextBlockStyle}"
+                 FontWeight="SemiBold"
+                 Margin="0,10,0,10"
+                 Visibility="{Binding UseNeatSaves, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        <StackPanel Margin="20,0,0,10" 
+                   Visibility="{Binding UseNeatSaves, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock Text="Maximum saves to keep:"
+                     Margin="0,0,0,5"/>
+            <ui:NumberBox Value="{Binding MaxNeatSaves}"
+                        Minimum="1"
+                        Maximum="100"
+                        SpinButtonPlacementMode="Compact"
+                        Width="120"
+                        HorizontalAlignment="Left"
+                        Margin="0,0,0,10"/>
+
+            <TextBlock Text="Save location:"
+                     Margin="0,0,0,5"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding NeatSavesLocation}"
+                       IsReadOnly="True"
+                       Margin="0,0,10,0"/>
+                <Button Grid.Column="1"
+                       Content="Browse"
+                       Command="{Binding BrowseNeatSavesLocationCommand}"/>
+            </Grid>
+        </StackPanel>
+        
+        <TextBlock Text="Note: Changes will take effect immediately after saving."
+                 TextWrapping="Wrap"
+                 Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                 Margin="0,10,0,0"/>
+    </StackPanel>
+</ui:ContentDialog> 
