@@ -32,7 +32,7 @@ A modern Windows application for organizing files using symbolic links, allowing
 ### Technical Details
 
 #### Architecture
-- Modern .NET 6.0 WPF application
+- Modern .NET 8.0 WPF application
 - MVVM architecture using CommunityToolkit.Mvvm
 - Dependency Injection for services
 - Async operations for better responsiveness
@@ -104,7 +104,7 @@ A modern Windows application for organizing files using symbolic links, allowing
 
 ## Technical Requirements
 - Windows OS (Windows 10 or later recommended)
-- .NET 6.0 Runtime
+- .NET 8.0 Runtime
 - Administrator privileges (for symbolic link creation)
 
 ## Dependencies
