@@ -52,10 +52,20 @@ Think of it like creating shortcuts, but WAY more powerful - apps can't even tel
 ## ✨ See It In Action
 
 ### Light Mode - Clean & Crisp
-![NeatShift Light Mode](lightmode.png)
+![NeatShift Light Mode](Refimages/lightmode.png)
 
 ### Dark Mode - Easy on the Eyes
-![NeatShift Dark Mode](darkmode.png)
+![NeatShift Dark Mode](Refimages/darkmode.png)
+
+### User Interface Highlights
+
+#### Safety Net Options
+![Safety Net Options](Refimages/safety-net.png)
+Choose between NeatSaves, System Restore, or both for maximum protection when moving files.
+
+#### Integrated File Explorer
+![Custom File Explorer Integration](Refimages/file-explorer.png)
+Modern file explorer interface with drag-and-drop support and intuitive file management.
 
 ##  What Makes NeatShift Special?
 
