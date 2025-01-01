@@ -57,18 +57,18 @@ Think of it like creating shortcuts, but WAY more powerful - apps can't even tel
 ### Dark Mode - Easy on the Eyes
 ![NeatShift Dark Mode](darkmode.png)
 
-## 🚀 What Makes NeatShift Special?
+##  What Makes NeatShift Special?
 
-* 🔗 **Smart Moving**: Move files anywhere, and NeatShift creates symbolic links so everything still works
-* 🛡️ **Double Safety**: Choose between NeatSaves quick backup or system restore points - or use both!
-* 🎨 **Looks Good, Feels Good**: Modern Windows 11 style with both light and dark themes
-* ⚡ **Super Simple**: Just drag and drop your files - it's that easy
-* 🔍 **Stay in Control**: See and manage all your symbolic links in one place
-* 📱 **Two Ways to Browse**: Simple guide view for beginners, pro explorer view when you need it
-* 🔄 **Always Updated**: Get notified when new versions drop, update right from the app
-* ⚠️ **No Surprises**: Smart checks to prevent accidents before they happen
+*  **Smart Moving**: Move files anywhere, and NeatShift creates symbolic links so everything still works
+*  **Double Safety**: Choose between NeatSaves quick backup or system restore points - or use both!
+*  **Looks Good, Feels Good**: Modern Windows 11 style with both light and dark themes
+*  **Super Simple**: Just drag and drop your files - it's that easy
+*  **Stay in Control**: See and manage all your symbolic links in one place
+*  **Two Ways to Browse**: Simple guide view for beginners, pro explorer view when you need it
+*  **Always Updated**: Get notified when new versions drop, update right from the app
+*  **No Surprises**: Smart checks to prevent accidents before they happen
 
-## 🎯 Getting Started
+##  Getting Started
 
 ### Just Want to Use It?
 1. Grab the latest version from our [Releases page](https://github.com/BytexGrid/NeatShift/releases)
