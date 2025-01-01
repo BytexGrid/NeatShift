@@ -16,7 +16,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/BytexGrid/NeatShift)
 ![GitHub all releases](https://img.shields.io/github/downloads/BytexGrid/NeatShift/total)
 ![GitHub](https://img.shields.io/github/license/BytexGrid/NeatShift)
-![.NET](https://img.shields.io/badge/.NET-6.0-512BD4)
+![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)
 
 </div>
 
