@@ -7,24 +7,21 @@ on:
     paths:
       - 'wiki/**'
 
-
 permissions:
-  contents: read
-  pages: write
-
+  contents: write
 
 jobs:
   update-wiki:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
         with:
           fetch-depth: 0
-
+          
       - name: Upload Wiki Content
-        uses: SwiftDocOrg/github-wiki-publish-action@98d0d21e4c8f4d7c7bef2e2dc8449b4c4c888878
+        uses: Andrew-Chen-Wang/github-wiki-action@v4
         with:
-          path: "wiki"
+          path: wiki
+          commit-message: "docs: update wiki content"
         env:
-          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
