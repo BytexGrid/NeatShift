@@ -116,7 +116,7 @@ Check out our [Wiki](https://github.com/BytexGrid/NeatShift/wiki) for all the de
 ## 💻 What You'll Need
 
 ### Bare Minimum:
-* Windows  10 or newer
+* Windows 10 version 1809 (build 17763)
 * Admin rights (for creating links)
 * 100 MB of space
 
