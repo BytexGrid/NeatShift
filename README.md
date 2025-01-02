@@ -98,7 +98,7 @@ git clone https://github.com/BytexGrid/NeatShift.git
 2. Fire up Visual Studio 2022
 3. You'll need:
    * Visual Studio 2022 (any flavor works)
-   * .NET 6.0 SDK
+   * .NET 8.0 SDK
    * Windows SDK 10.0.19041.0+
 4. Ready to roll:
    * Set `NeatShift` as your startup
@@ -116,12 +116,12 @@ Check out our [Wiki](https://github.com/BytexGrid/NeatShift/wiki) for all the de
 ## 💻 What You'll Need
 
 ### Bare Minimum:
-* Windows 7 SP1 or newer
+* Windows  10 or newer
 * Admin rights (for creating links)
 * 100 MB of space
 
 ### For the Best Experience:
-* Windows 10/11
+* Windows 11
 * An SSD (because faster is better)
 * System Restore turned on (just in case)
 
