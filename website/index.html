@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeatShift - Smart File Organization</title>
+    <link rel="icon" type="image/x-icon" href="./icon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #9333EA;
+            --primary-light: #F3E8FF;
+            --text: #1F2937;
+            --text-light: #6B7280;
+            --background: #FFFFFF;
+            --card-bg: #F9FAFB;
+            --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --border-color: #E5E7EB;
+            --gradient: linear-gradient(135deg, #9333EA, #7C3AED);
+        }
+
+        [data-theme="dark"] {
+            --primary: #A855F7;
+            --primary-light: #2D1B69;
+            --text: #F3F4F6;
+            --text-light: #D1D5DB;
+            --background: #111827;
+            --card-bg: #1F2937;
+            --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            --border-color: #374151;
+            --gradient: linear-gradient(135deg, #A855F7, #7C3AED);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 16px;
+            right: 20px;
+            z-index: 1001;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-text {
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .hero-image {
+            width: 100%;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: var(--hover-shadow);
+            transition: all 0.5s ease;
+            transform: scale(1.1);
+        }
+
+        .hero h1 {
+            font-size: 4.5em;
+            margin-bottom: 0;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.4em;
+            color: var(--text-light);
+            margin-bottom: 32px;
+            max-width: 540px;
+            line-height: 1.5;
+        }
+
+        .cta-buttons {
+            margin-top: 8px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(147, 51, 234, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(147, 51, 234, 0.2);
+        }
+
+        /* Feature Cards */
+        .features {
+            padding: 100px 0;
+            background: var(--card-bg);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5em;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .feature-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            background: var(--background);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:nth-child(even) {
+            direction: rtl;
+        }
+
+        .feature-card:nth-child(even) .feature-content {
+            direction: ltr;
+        }
+
+        .feature-card:nth-child(even) .feature-image {
+            direction: ltr;
+        }
+
+        .feature-image {
+            width: 100%;
+        }
+
+        .feature-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 0;
+            transition: all 0.3s ease;
+            box-shadow: var(--hover-shadow);
+        }
+
+        .feature-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Safety Features */
+        .safety {
+            padding: 60px 0 120px 0;
+            background: var(--background);
+        }
+
+        .safety-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .safety-main {
+            width: 100%;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .safety-main:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .safety-main img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: var(--hover-shadow);
+        }
+
+        .safety-secondary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        .safety-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .safety-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .safety-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: var(--hover-shadow);
+        }
+
+        .safety-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .safety-card p {
+            font-size: 1.1em;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .safety-secondary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 0;
+            background: var(--gradient);
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 3em;
+            margin-bottom: 30px;
+        }
+
+        .cta p {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            padding: 50px 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-column h4 {
+            color: var(--text);
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin: 10px 0;
+        }
+
+        .footer-column a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+
+        /* Theme-aware images */
+        .theme-aware-image {
+            display: none;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: var(--hover-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .theme-aware-image.light {
+            display: block;
+        }
+
+        [data-theme="dark"] .theme-aware-image.light {
+            display: none;
+        }
+
+        [data-theme="dark"] .theme-aware-image.dark {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 16px;
+                font-size: 0.9em;
+            }
+
+            .nav-logo {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .nav-brand {
+                font-size: 1.5em;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+
+            .hero h1 {
+                font-size: 3em;
+            }
+
+            .hero p {
+                font-size: 1.2em;
+                margin: 0 auto 24px auto;
+            }
+
+            .hero-image img {
+                transform: scale(1);
+                max-width: 90%;
+                margin: 0 auto;
+                display: block;
+            }
+
+            .feature-card {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 24px;
+                direction: ltr;
+            }
+
+            .feature-card:nth-child(even) {
+                direction: ltr;
+            }
+
+            .feature-content {
+                text-align: center;
+            }
+
+            .feature-heading {
+                font-size: 2.2em;
+            }
+
+            .safety-main {
+                padding: 24px;
+            }
+
+            .safety-card {
+                padding: 24px;
+            }
+
+            .safety-card h3 {
+                font-size: 1.5em;
+            }
+
+            .mini-card {
+                padding: 20px;
+            }
+
+            .mini-card h4 {
+                font-size: 1.2em;
+            }
+
+            .cta h2 {
+                font-size: 2.2em;
+            }
+
+            .cta p {
+                font-size: 1.1em;
+                padding: 0 20px;
+            }
+
+            .btn {
+                padding: 14px 24px;
+                font-size: 1em;
+            }
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--background);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 1.8em;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .nav-logo {
+            width: 48px;
+            height: 48px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 16px;
+                font-size: 0.9em;
+            }
+
+            .nav-logo {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .nav-brand {
+                font-size: 1.5em;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-image img {
+                transform: scale(1);
+            }
+        }
+
+        .feature-heading {
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+
+        .feature-description {
+            font-size: 1.2em;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta .btn {
+            min-width: 200px;
+        }
+
+        .all-features {
+            padding: 100px 0 60px 0;
+            background: var(--background);
+        }
+
+        .feature-categories {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .category-btn {
+            padding: 12px 24px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--card-bg);
+            color: var(--text);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn.active {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .feature-cards {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .feature-cards.active {
+            display: grid;
+        }
+
+        .mini-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .mini-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .card-icon {
+            font-size: 2em;
+            margin-bottom: 16px;
+        }
+
+        .mini-card h4 {
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .mini-card p {
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        .card-details {
+            max-height: 0;
+            opacity: 0;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .mini-card:hover .card-details {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 16px;
+        }
+
+        .card-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card-details li {
+            color: var(--text-light);
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .card-details li:before {
+            content: "•";
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 768px) {
+            .feature-categories {
+                flex-wrap: wrap;
+            }
+            
+            .category-btn {
+                width: calc(50% - 8px);
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        🌙
+    </button>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="nav-brand">
+                    <img src="../NeatShift/Icon/icon.png" alt="NeatShift" class="nav-logo">
+                    <span>NeatShift</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#safety">Safety</a>
+                    <a href="#download">Download</a>
+                    <a href="https://github.com/BytexGrid/NeatShift" target="_blank">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Smart File Organization</h1>
+                    <p>Organize your files smarter, not harder. Move them anywhere while keeping all your programs and games working perfectly. Stay organized, stay efficient.</p>
+                    <div class="cta-buttons">
+                        <a href="https://github.com/BytexGrid/NeatShift/releases" class="btn btn-primary">Download Now</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="images for pages/Interface_light.png" alt="NeatShift Interface" class="theme-aware-image light">
+                    <img src="images for pages/Interface_dark.png" alt="NeatShift Interface" class="theme-aware-image dark">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Features that make life easier</h2>
+                <p>Powerful tools to keep your files organized and your system running smoothly</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-image">
+                        <img src="images for pages/NeatExplorer_light.png" alt="NeatExplorer" class="theme-aware-image light">
+                        <img src="images for pages/NeatExplorer_dark.png" alt="NeatExplorer" class="theme-aware-image dark">
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-heading">NeatExplorer</h3>
+                        <p class="feature-description">Advanced file browsing with NeatExplorer makes moving files a breeze</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-image">
+                        <img src="images for pages/DragNDropzone_light.png" alt="Drag and Drop" class="theme-aware-image light">
+                        <img src="images for pages/DragNDropzone_dark.png" alt="Drag and Drop" class="theme-aware-image dark">
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-heading">DropZone</h3>
+                        <p class="feature-description">Simply drag your files or use the built-in file picker - it's that simple</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-image">
+                        <img src="images for pages/symlinkmanagement_light.png" alt="Symlink Management" class="theme-aware-image light">
+                        <img src="images for pages/symlinkmanagement_dark.png" alt="Symlink Management" class="theme-aware-image dark">
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-heading">SymLinks Manager</h3>
+                        <p class="feature-description">View and manage all your symbolic links in one place</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="all-features" id="all-features">
+        <div class="container">
+            <div class="section-title">
+                <h2>More Powerful Features</h2>
+                <p>Discover all the tools at your disposal</p>
+            </div>
+            
+            <div class="feature-categories">
+                <button class="category-btn active" data-category="interface">Modern Interface</button>
+                <button class="category-btn" data-category="protection">System Protection</button>
+                <button class="category-btn" data-category="management">File Management</button>
+            </div>
+
+            <div class="feature-cards interface active">
+                <div class="mini-card">
+                    <div class="card-icon">🎨</div>
+                    <h4>Modern Design</h4>
+                    <p>Windows 11 style interface that feels native</p>
+                    <div class="card-details">
+                        <ul>
+                            <li>Auto theme sync</li>
+                            <li>Custom accent colors</li>
+                            <li>Smooth animations</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mini-card">
+                    <div class="card-icon">📚</div>
+                    <h4>Built-in Guide</h4>
+                    <p>Interactive tutorial to get you started</p>
+                    <div class="card-details">
+                        <ul>
+                            <li>Step-by-step guidance</li>
+                            <li>Feature explanations</li>
+                            <li>Quick tips</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mini-card">
+                    <div class="card-icon">💡</div>
+                    <h4>User First</h4>
+                    <p>Built with user feedback in mind</p>
+                    <div class="card-details">
+                        <ul>
+                            <li>Feature request system</li>
+                            <li>Direct support access</li>
+                            <li>Regular updates</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-cards protection">
+                <div class="mini-card">
+                    <div class="card-icon">🔄</div>
+                    <h4>Selective Restore Points</h4>
+                    <p>Delete specific restore points individually - a feature not available in Windows!</p>
+                    <div class="card-details">
+                        <ul>
+                            <li>View all restore points with timestamps</li>
+                            <li>Create new restore points manually</li>
+                            <li>Direct access to System Protection</li>
+                            <li>Space-saving through selective deletion</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mini-card">
+                    <div class="card-icon">⚡</div>
+                    <h4>Quick Protection</h4>
+                    <p>Lightning-fast NeatSaves for immediate backup needs</p>
+                    <div class="card-details">
+                        <ul>
+                            <li>Minimal space usage</li>
+                            <li>Quick undo operations</li>
+                            <li>Works across drives</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mini-card">
+                    <div class="card-icon">🛡️</div>
+                    <h4>Combined Protection</h4>
+                    <p>Use both NeatSaves and System Restore for maximum safety</p>
+                    <div class="card-details">
+                        <ul>
+                            <li>Best of both worlds</li>
+                            <li>Flexible recovery options</li>
+                            <li>Complete system protection</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-cards management">
+                <div class="mini-card">
+                    <div class="card-icon">🔗</div>
+                    <h4>Advanced Symlinks</h4>
+                    <p>Create and manage symbolic links with ease</p>
+                    <div class="card-details">
+                        <ul>
+                            <li>Batch operations support</li>
+                            <li>Cross-drive compatibility</li>
+                            <li>Visual link management</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mini-card">
+                    <div class="card-icon">📂</div>
+                    <h4>Smart Browser</h4>
+                    <p>Built-in NeatExplorer for efficient file management</p>
+                    <div class="card-details">
+                        <ul>
+                            <li>Custom file browser</li>
+                            <li>Drag-and-drop support</li>
+                            <li>Quick access tools</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mini-card">
+                    <div class="card-icon">👁️</div>
+                    <h4>Link Visibility</h4>
+                    <p>Comprehensive view of all your symbolic links</p>
+                    <div class="card-details">
+                        <ul>
+                            <li>View all links at once</li>
+                            <li>Check link status</li>
+                            <li>Quick link management</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="safety" id="safety">
+        <div class="container">
+            <div class="section-title">
+                <h2>Two-Layer Protection</h2>
+                <p>Choose the safety features that work best for you</p>
+            </div>
+            <div class="safety-grid">
+                <div class="safety-main">
+                    <img src="images for pages/SafetyNet_light.png" alt="NeatSaves" class="theme-aware-image light">
+                    <img src="images for pages/SafetyNet_dark.png" alt="NeatSaves" class="theme-aware-image dark">
+                    <h3>NeatSaves</h3>
+                    <p>Lightning-fast backups with minimal space usage</p>
+                </div>
+                <div class="safety-secondary">
+                    <div class="safety-card">
+                        <img src="images for pages/RestorePoint_light.png" alt="Restore Points" class="theme-aware-image light">
+                        <img src="images for pages/RestorePoint_dark.png" alt="Restore Points" class="theme-aware-image dark">
+                        <h3>Restore Points</h3>
+                        <p>Advanced restore point management with selective deletion</p>
+                    </div>
+                    <div class="safety-card">
+                        <img src="images for pages/Updatecheck_light.png" alt="Auto Updates" class="theme-aware-image light">
+                        <img src="images for pages/Updatecheck_dark.png" alt="Auto Updates" class="theme-aware-image dark">
+                        <h3>Always Up to Date</h3>
+                        <p>Built-in update checker keeps you on the latest version</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="download">
+        <div class="container">
+            <h2>Ready to organize your files?</h2>
+            <p>Download NeatShift now and take control of your storage</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/BytexGrid/NeatShift/releases/latest" class="btn btn-primary">Download Now</a>
+                <a href="stable versions/NeatShift.exe" class="btn btn-primary" download>Download .exe (x64) 🪟</a>
+                <a href="https://github.com/BytexGrid/NeatShift/wiki" class="btn btn-secondary">Read Documentation</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="https://github.com/BytexGrid/NeatShift/wiki">Documentation</a></li>
+                        <li><a href="https://github.com/BytexGrid/NeatShift/releases">Download</a></li>
+                        <li><a href="https://github.com/BytexGrid/NeatShift/wiki/FAQ">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="https://github.com/BytexGrid/NeatShift/issues">Report Issues</a></li>
+                        <li><a href="https://github.com/BytexGrid/NeatShift/discussions">Discussions</a></li>
+                        <li><a href="https://github.com/BytexGrid/NeatShift">Source Code</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="https://github.com/BytexGrid">About BytexGrid</a></li>
+                        <li><a href="https://github.com/BytexGrid/NeatShift/blob/main/LICENSE">License</a></li>
+                        <li><a href="https://github.com/BytexGrid/NeatShift/security">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                themeToggle.innerHTML = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            document.querySelector('.theme-toggle').innerHTML = '☀️';
+        }
+
+        // Check system preference if no saved theme
+        if (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.setAttribute('data-theme', 'dark');
+            document.querySelector('.theme-toggle').innerHTML = '☀️';
+        }
+
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and cards
+                document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.feature-cards').forEach(card => card.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding cards
+                button.classList.add('active');
+                document.querySelector(`.feature-cards.${button.dataset.category}`).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html> 
