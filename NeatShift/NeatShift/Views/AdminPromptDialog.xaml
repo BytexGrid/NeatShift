@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:ContentDialog
+    x:Class="NeatShift.Views.AdminPromptDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="Administrator Access Required"
+    PrimaryButtonText="Continue"
+    CloseButtonText="Cancel"
+    DefaultButton="Primary">
+
+    <StackPanel Margin="0,10,0,0">
+        <TextBlock x:Name="ReasonText"
+                 TextWrapping="Wrap"
+                 Margin="0,0,0,20"/>
+
+        <TextBlock Text="This action requires administrator privileges to:"
+                 FontWeight="SemiBold"
+                 Margin="0,0,0,10"/>
+
+        <TextBlock x:Name="ActionText"
+                 TextWrapping="Wrap"
+                 Margin="20,0,0,0"/>
+    </StackPanel>
+</ui:ContentDialog> 

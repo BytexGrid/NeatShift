@@ -134,8 +134,12 @@ namespace NeatShift.ViewModels
 
             if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.SelectedPath))
             {
-                var linksDialog = new SymbolicLinksDialog(dialog.SelectedPath);
-                await linksDialog.ShowAsync();
+                var (reason, actions) = AdminManager.Messages.ViewLinks;
+                if (await AdminManager.EnsureAdmin(reason, actions))
+                {
+                    var linksDialog = new SymbolicLinksDialog(dialog.SelectedPath);
+                    await linksDialog.ShowAsync();
+                }
             }
         }
 
@@ -148,43 +152,51 @@ namespace NeatShift.ViewModels
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileOperations))]
-        private void AddFiles()
+        private async Task AddFiles()
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog
+            var (reason, actions) = AdminManager.Messages.SymbolicLink;
+            if (await AdminManager.EnsureAdmin(reason, actions))
             {
-                Multiselect = true,
-                Title = "Select files to move"
-            };
-
-            if (dialog.ShowDialog() == true)
-            {
-                foreach (string file in dialog.FileNames)
+                var dialog = new Microsoft.Win32.OpenFileDialog
                 {
-                    if (!string.IsNullOrEmpty(file))
+                    Multiselect = true,
+                    Title = "Select files to move"
+                };
+
+                if (dialog.ShowDialog() == true)
+                {
+                    foreach (string file in dialog.FileNames)
                     {
-                        SourceItems.Add(new FileSystemItem(file));
+                        if (!string.IsNullOrEmpty(file))
+                        {
+                            SourceItems.Add(new FileSystemItem(file));
+                        }
                     }
                 }
             }
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileOperations))]
-        private void AddFolder()
+        private async Task AddFolder()
         {
-            using var dialog = new CommonOpenFileDialog
+            var (reason, actions) = AdminManager.Messages.SymbolicLink;
+            if (await AdminManager.EnsureAdmin(reason, actions))
             {
-                Title = "Select folders to move",
-                IsFolderPicker = true,
-                Multiselect = true
-            };
-
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
-            {
-                foreach (string folder in dialog.FileNames)
+                using var dialog = new CommonOpenFileDialog
                 {
-                    if (!string.IsNullOrEmpty(folder))
+                    Title = "Select folders to move",
+                    IsFolderPicker = true,
+                    Multiselect = true
+                };
+
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    foreach (string folder in dialog.FileNames)
                     {
-                        SourceItems.Add(new FileSystemItem(folder));
+                        if (!string.IsNullOrEmpty(folder))
+                        {
+                            SourceItems.Add(new FileSystemItem(folder));
+                        }
                     }
                 }
             }
@@ -272,7 +284,12 @@ namespace NeatShift.ViewModels
                 return;
             }
 
-            await MoveFiles();
+            // Request admin rights if needed
+            var (reason, actions) = AdminManager.Messages.SymbolicLink;
+            if (await AdminManager.EnsureAdmin(reason, actions))
+            {
+                await MoveFiles();
+            }
         }
 
         private bool CanExecuteFileOperations() => !IsOperationInProgress;
@@ -389,8 +406,12 @@ namespace NeatShift.ViewModels
         [RelayCommand]
         private async Task ManageRestorePoints()
         {
-            var dialog = new RestorePointDialog();
-            await dialog.ShowAsync();
+            var (reason, actions) = AdminManager.Messages.Backup;
+            if (await AdminManager.EnsureAdmin(reason, actions))
+            {
+                var dialog = new RestorePointDialog();
+                await dialog.ShowAsync();
+            }
         }
 
         [RelayCommand]
@@ -554,8 +575,12 @@ namespace NeatShift.ViewModels
         [RelayCommand]
         private async Task ManageNeatSaves()
         {
-            var dialog = new NeatSavesManagementDialog(_neatSavesService);
-            await dialog.ShowAsync();
+            var (reason, actions) = AdminManager.Messages.Backup;
+            if (await AdminManager.EnsureAdmin(reason, actions))
+            {
+                var dialog = new NeatSavesManagementDialog(_neatSavesService);
+                await dialog.ShowAsync();
+            }
         }
 
         [RelayCommand]
