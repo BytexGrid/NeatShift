@@ -6,7 +6,8 @@
 
 <p align="center">
   <a href="https://github.com/BytexGrid/NeatShift/wiki">📚 Learn More</a> •
-  <a href="https://github.com/BytexGrid/NeatShift/releases">📦 Download Now</a> •
+  <a href="https://apps.microsoft.com/store/detail/9NHF5VVHDCGZ">🏪 Microsoft Store</a> •
+  <a href="https://github.com/BytexGrid/NeatShift/releases">📦 Download</a> •
   <a href="https://github.com/BytexGrid/NeatShift/issues">🐛 Found a Bug?</a> •
   <a href="https://github.com/BytexGrid/NeatShift/issues">💡 Share Ideas</a>
 </p>
@@ -17,6 +18,19 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/BytexGrid/NeatShift/total)
 ![GitHub](https://img.shields.io/github/license/BytexGrid/NeatShift)
 ![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)
+
+<h2> Available on Microsoft Store!</h2>
+
+<a href="https://apps.microsoft.com/store/detail/9NHF5VVHDCGZ?cid=DevShareMCLPCB">
+  <img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Get it from Microsoft" />
+</a>
+
+<table>
+<tr>
+<td align="center"><b>Microsoft Store Version</b><br>✨ One-click install<br>🔄 Auto-updates<br>📊 Optional telemetry</td>
+<td align="center"><b>GitHub Release</b><br>🔓 Open source<br>🎯 No telemetry<br>💻 Manual install</td>
+</tr>
+</table>
 
 </div>
 
