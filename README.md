@@ -27,8 +27,8 @@
 
 <table>
 <tr>
-<td align="center"><b>Microsoft Store Version</b><br>✨ One-click install<br>🔄 Auto-updates<br>📊 Optional telemetry</td>
-<td align="center"><b>GitHub Release</b><br>🔓 Open source<br>🎯 No telemetry<br>💻 Manual install</td>
+<td align="center"><b>Microsoft Store Version</b><br>- One-click install<br>- Auto-updates<br>- Optional telemetry</td>
+<td align="center"><b>GitHub Release</b><br>- Open source<br>- No telemetry<br>- Manual install</td>
 </tr>
 </table>
 
