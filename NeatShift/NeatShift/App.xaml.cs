@@ -21,33 +21,6 @@ namespace NeatShift
         [SupportedOSPlatform("windows7.0")]
         protected override void OnStartup(StartupEventArgs e)
         {
-            // Check if running as administrator
-            bool isAdmin = IsRunningAsAdministrator();
-            if (!isAdmin)
-            {
-                // Restart the application with admin rights
-                try
-                {
-                    var processInfo = new ProcessStartInfo
-                    {
-                        UseShellExecute = true,
-                        FileName = Process.GetCurrentProcess().MainModule?.FileName,
-                        Verb = "runas"
-                    };
-
-                    Process.Start(processInfo);
-                    Current.Shutdown();
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Failed to restart with administrator privileges: {ex.Message}", 
-                        "Error", 
-                        MessageBoxButton.OK, 
-                        MessageBoxImage.Error);
-                }
-            }
-
             var services = new ServiceCollection();
 
             ConfigureServices(services);
