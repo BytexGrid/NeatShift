@@ -48,7 +48,7 @@ In the Microsoft Store version:
 - You can generate a new random ID at any time
 
 ## Data Storage
-- Telemetry data is processed using Google Analytics 4
+- Telemetry data is processed using PostHog (open-source analytics)
 - Data is stored securely and anonymously
 - Data is only used in aggregate form
 - Individual user sessions are not analyzed
