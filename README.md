@@ -46,7 +46,7 @@ You want to move those huge game folders to your bigger HDD, but:
 - Shortcuts break
 - File paths in your apps stop working
 
-**That's where NeatShift comes in!** 🎮
+**That's where NeatShift comes in!** 
 
 It lets you:
 1. Move those big game folders to `D:\Games`
