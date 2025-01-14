@@ -1,7 +1,7 @@
 <div align="center">
   <img src="icon.ico" alt="NeatShift Logo" width="128" height="128">
   <h1>NeatShift</h1>
-  <p>Keep your files organized, without losing track of them 🎯</p>
+  <p>Keep your files organized, without losing track of them </p>
 </div>
 
 <p align="center">
@@ -34,7 +34,7 @@
 
 </div>
 
-Hey there! 👋 Ever get frustrated with messy files scattered across your PC? Let me explain what NeatShift does with a real example:
+Hey there!  Ever get frustrated with messy files scattered across your PC? Let me explain what NeatShift does with a real example:
 
 Imagine you have:
 - Games in `C:\Games` (eating up your SSD space)
@@ -63,7 +63,7 @@ Think of it like creating shortcuts, but WAY more powerful - apps can't even tel
 
 > **Note**: English isn't my first language, so you might spot some quirks in the documentation. Feel free to suggest improvements!
 
-## ✨ See It In Action
+##  See It In Action
 
 ### Light Mode - Clean & Crisp
 ![NeatShift Light Mode](Refimages/lightmode.png)
@@ -127,7 +127,7 @@ Check out our [Wiki](https://github.com/BytexGrid/NeatShift/wiki) for all the de
 - [Safety First](https://github.com/BytexGrid/NeatShift/wiki/Security-and-Verification)
 - [Common Questions](https://github.com/BytexGrid/NeatShift/wiki/FAQ)
 
-## 💻 What You'll Need
+##  What You'll Need
 
 ### Bare Minimum:
 * Windows 10 version 1809 (build 17763)
@@ -139,7 +139,7 @@ Check out our [Wiki](https://github.com/BytexGrid/NeatShift/wiki) for all the de
 * An SSD (because faster is better)
 * System Restore turned on (just in case)
 
-## 🔑 About Those Admin Rights
+##  About Those Admin Rights
 
 NeatShift needs admin privileges for two things:
 
@@ -162,7 +162,7 @@ Got questions or ideas?
 * Browse our [Wiki](https://github.com/BytexGrid/NeatShift/wiki)
 * [Open an Issue](https://github.com/BytexGrid/NeatShift/issues) - I read them all!
 
-## 📜 Legal Stuff
+##  Legal Stuff
 
 NeatShift is free software under the GNU General Public License v3.0. In simple terms:
 - Use it however you like
