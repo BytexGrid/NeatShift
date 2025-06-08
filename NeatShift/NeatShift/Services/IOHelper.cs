@@ -6,6 +6,7 @@ using System.Security.Principal;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace NeatShift.Services
 {
@@ -45,25 +46,67 @@ namespace NeatShift.Services
         }
 
         [SupportedOSPlatform("windows")]
-        public static bool CreateSymbolicLink(string linkPath, string targetPath, bool isDirectory, bool hideLink = true)
+        public static (bool success, string errorMessage) CreateSymbolicLink(string linkPath, string targetPath, bool isDirectory, bool hideLink = true)
         {
             try
             {
+                // Check if target exists
+                if (!File.Exists(targetPath) && !Directory.Exists(targetPath))
+                {
+                    return (false, "Target file or directory does not exist");
+                }
+
+                // Check if link already exists
+                if (File.Exists(linkPath) || Directory.Exists(linkPath))
+                {
+                    return (false, "A file or directory already exists at the link location");
+                }
+
+                // Check if we have write permission to the link location
+                string linkDirectory = Path.GetDirectoryName(linkPath) ?? string.Empty;
+                if (!string.IsNullOrEmpty(linkDirectory) && !Directory.Exists(linkDirectory))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(linkDirectory);
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        return (false, "No permission to create directory at the link location");
+                    }
+                }
+
                 bool success = NativeMethods.CreateSymbolicLink(
                     linkPath,
                     targetPath,
                     isDirectory ? NativeMethods.SymbolicLink.Directory : NativeMethods.SymbolicLink.File);
 
-                if (success && hideLink)
+                if (!success)
                 {
-                    HideSymbolicLink(linkPath);
+                    int errorCode = Marshal.GetLastWin32Error();
+                    string errorMessage = errorCode switch
+                    {
+                        5 => "Access denied. Administrator privileges are required to create symbolic links",
+                        183 => "A file or directory already exists at the link location",
+                        1314 => "The client does not have the required privileges",
+                        _ => $"Failed to create symbolic link (Error code: {errorCode})"
+                    };
+                    return (false, errorMessage);
                 }
 
-                return success;
+                if (success && hideLink)
+                {
+                    if (!HideSymbolicLink(linkPath))
+                    {
+                        return (false, "Symbolic link created but failed to hide it");
+                    }
+                }
+
+                return (true, string.Empty);
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                return (false, $"Unexpected error: {ex.Message}");
             }
         }
 

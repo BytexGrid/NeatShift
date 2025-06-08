@@ -25,11 +25,43 @@ namespace NeatShift.Services
             {
                 OnProgressChanged(0, $"Preparing to move {Path.GetFileName(sourcePath)}...");
 
+                // Check if the destination is a network path
+                if (destinationPath.StartsWith(@"\\"))
+                {
+                    OnProgressChanged(0, "Error: Moving files to network drives is not supported. Please choose a local destination.");
+                    return false;
+                }
+
                 // Check if the destination already exists
                 if (File.Exists(destinationPath) || Directory.Exists(destinationPath))
                 {
                     OnProgressChanged(0, "Error: A file or folder with the same name already exists in the destination.");
                     return false;
+                }
+
+                // Check if source exists
+                if (!File.Exists(sourcePath) && !Directory.Exists(sourcePath))
+                {
+                    OnProgressChanged(0, "Error: The source file or folder does not exist.");
+                    return false;
+                }
+
+                // Check if we have write permission to the destination
+                string destDirectory = Path.GetDirectoryName(destinationPath) ?? string.Empty;
+                if (!string.IsNullOrEmpty(destDirectory))
+                {
+                    try
+                    {
+                        if (!Directory.Exists(destDirectory))
+                        {
+                            Directory.CreateDirectory(destDirectory);
+                        }
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        OnProgressChanged(0, "Error: No permission to create directory at the destination location.");
+                        return false;
+                    }
                 }
 
                 if (_settingsService.GetCreateRestorePoint())
@@ -48,17 +80,7 @@ namespace NeatShift.Services
                     }
                 }
 
-                OnProgressChanged(30, "Moving files...");
-                string? destinationDir = Path.GetDirectoryName(destinationPath);
-                if (string.IsNullOrEmpty(destinationDir))
-                {
-                    OnProgressChanged(0, "Error: Invalid destination path");
-                    return false;
-                }
-
-                // Create destination directory if it doesn't exist
-                Directory.CreateDirectory(destinationDir);
-
+                OnProgressChanged(20, "Moving file/folder...");
                 try
                 {
                     // Use Task.Run for potentially long-running file operations
@@ -79,10 +101,21 @@ namespace NeatShift.Services
                     OnProgressChanged(0, "Error: A file or folder with the same name already exists in the destination.");
                     return false;
                 }
+                catch (UnauthorizedAccessException)
+                {
+                    OnProgressChanged(0, "Error: No permission to move the file/folder. Please check your permissions.");
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    OnProgressChanged(0, $"Error moving file/folder: {ex.Message}");
+                    return false;
+                }
 
                 OnProgressChanged(60, "Creating symbolic link...");
                 bool hideLink = _settingsService.GetHideSymbolicLinks();
-                bool success = await Task.Run(() => IOHelper.CreateSymbolicLink(sourcePath, destinationPath, Directory.Exists(destinationPath), hideLink));
+                var (success, errorMessage) = await Task.Run(() => 
+                    IOHelper.CreateSymbolicLink(sourcePath, destinationPath, Directory.Exists(destinationPath), hideLink));
 
                 if (success)
                 {
@@ -90,12 +123,33 @@ namespace NeatShift.Services
                     return true;
                 }
 
-                OnProgressChanged(0, "Failed to create symbolic link. This may require administrator privileges.");
+                // If symbolic link creation failed, try to move the file back
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        if (Directory.Exists(destinationPath))
+                        {
+                            Directory.Move(destinationPath, sourcePath);
+                        }
+                        else
+                        {
+                            File.Move(destinationPath, sourcePath);
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    OnProgressChanged(0, $"Error: {errorMessage}\nAdditionally, failed to restore the original file location: {ex.Message}");
+                    return false;
+                }
+
+                OnProgressChanged(0, $"Error: {errorMessage}");
                 return false;
             }
             catch (Exception ex)
             {
-                OnProgressChanged(0, $"Error: {ex.Message}");
+                OnProgressChanged(0, $"Unexpected error: {ex.Message}");
                 return false;
             }
         }

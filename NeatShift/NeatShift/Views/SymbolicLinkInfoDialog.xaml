@@ -78,8 +78,15 @@
             <!-- Note -->
             <TextBlock TextWrapping="Wrap" 
                      Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                     FontStyle="Italic"
+                     Margin="0,0,0,10">
+                Note: Creating symbolic links requires administrator privileges in Windows. This is a security feature of Windows, not a limitation of NeatShift. When you first try to create a symbolic link, NeatShift will automatically request administrator privileges.
+            </TextBlock>
+
+            <TextBlock TextWrapping="Wrap" 
+                     Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
                      FontStyle="Italic">
-                Note: Creating symbolic links requires administrator privileges, which is why NeatShift asks for elevation when needed.
+                Why does Windows require admin rights for symbolic links? Symbolic links can be used to create security vulnerabilities if not properly managed, which is why Windows restricts their creation to administrators.
             </TextBlock>
         </StackPanel>
     </ScrollViewer>
