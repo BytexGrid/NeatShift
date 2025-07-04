@@ -1,0 +1,39 @@
+<Window x:Class="NeatShift.Views.ErrorDetailsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        mc:Ignorable="d"
+        Title="Error Details" Height="450" Width="600"
+        WindowStartupLocation="CenterScreen"
+        ui:WindowHelper.UseModernWindowStyle="True">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{Binding IssueTitle}" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Text="Bug Description" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding BugDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Margin="0,5,0,10" AcceptsReturn="True" MinLines="3"/>
+
+                <TextBlock Text="System Info" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding SystemInfo}" IsReadOnly="True" TextWrapping="Wrap" Margin="0,5,0,10" FontFamily="Consolas"/>
+
+                <TextBlock Text="Additional Context" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding AdditionalContext, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Margin="0,5,0,0" AcceptsReturn="True" MinLines="2"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button Content="Open Logs Folder" Command="{Binding OpenLogsFolderCommand}" Margin="0,0,10,0"/>
+            <Button Content="Copy to Clipboard" Command="{Binding CopyToClipboardCommand}" Margin="0,0,10,0"/>
+            <Button Content="Submit on GitHub" Command="{Binding SubmitOnGitHubCommand}" IsDefault="True"/>
+        </StackPanel>
+    </Grid>
+</Window> 

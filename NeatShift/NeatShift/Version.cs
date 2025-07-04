@@ -11,7 +11,7 @@ namespace NeatShift
                 return version?.ToString() ?? "2.0.0";
             }
         }
-        public const string Copyright = "© 2024 BytexGrid";
+        public const string Copyright = "© 2025 BytexGrid";
         public const string Description = "A modern file organization tool with symbolic link support.";
     }
 } 

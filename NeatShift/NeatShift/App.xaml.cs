@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Runtime.Versioning;
 using System.Security.Principal;
 using System.Windows;
+using System.Linq;
 
 namespace NeatShift
 {
@@ -19,7 +20,7 @@ namespace NeatShift
         public IServiceProvider Services => _serviceProvider ?? throw new InvalidOperationException("Services not initialized");
 
         [SupportedOSPlatform("windows7.0")]
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             var services = new ServiceCollection();
 
@@ -27,7 +28,23 @@ namespace NeatShift
 
             _serviceProvider = services.BuildServiceProvider();
 
-            var mainWindow = new MainWindow(_serviceProvider.GetRequiredService<MainWindowViewModel>());
+            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+
+            if (e.Args.Any(arg => arg == "--resume"))
+            {
+                var pending = PendingMoveManager.LoadAndDelete();
+                if (pending != null)
+                {
+                    var vm = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+                    vm.DestinationPath = pending.DestinationPath;
+                    foreach (var p in pending.SourcePaths)
+                    {
+                        vm.AddSourceItem(p);
+                    }
+                    vm.StatusMessage = "Review restored selection and click Move to continue.";
+                }
+            }
+
             mainWindow.Show();
         }
 
@@ -59,7 +76,9 @@ namespace NeatShift
             services.AddSingleton<IRecentLocationsService, RecentLocationsService>();
             services.AddSingleton<FileBrowserViewModel>();
             services.AddSingleton<MainWindowViewModel>();
-            services.AddSingleton<MainWindow>(sp => new MainWindow(sp.GetRequiredService<MainWindowViewModel>()));
+            services.AddSingleton<MainWindow>(sp => new MainWindow(
+                sp.GetRequiredService<MainWindowViewModel>(),
+                sp.GetRequiredService<ISettingsService>()));
             services.AddHttpClient();
         }
     }

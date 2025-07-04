@@ -140,5 +140,12 @@ namespace NeatShift.Models
                 }
             }
         }
+
+        public double WindowHeight { get; set; } = 600;
+        public double WindowWidth { get; set; } = 800;
+        public double WindowTop { get; set; } = 100;
+        public double WindowLeft { get; set; } = 100;
+        public WindowState WindowState { get; set; } = WindowState.Normal;
+        public bool IsFirstLaunch { get; set; } = true;
     }
 } 

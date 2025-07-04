@@ -68,6 +68,13 @@ namespace NeatShift.ViewModels
             IsGuideSelected = view == "Guide";
         }
 
+        [ObservableProperty]
+        private string _detailedStatusMessage = string.Empty;
+
+        public bool IsErrorStatus => StatusMessage.StartsWith("Error", StringComparison.OrdinalIgnoreCase);
+
+        public bool IsSuccessStatus => StatusMessage.StartsWith("Operation completed", StringComparison.OrdinalIgnoreCase);
+
         public MainWindowViewModel(IFileOperationService fileOperationService, ISettingsService settingsService, INeatSavesService neatSavesService, FileBrowserViewModel fileBrowserViewModel)
         {
             _fileOperationService = fileOperationService ?? throw new ArgumentNullException(nameof(fileOperationService));
@@ -286,9 +293,24 @@ namespace NeatShift.ViewModels
 
             // Request admin rights if needed
             var (reason, actions) = AdminManager.Messages.SymbolicLink;
+            if (!AdminManager.IsAdminGranted)
+            {
+                // Save pending move
+                var pending = new PendingMove
+                {
+                    DestinationPath = DestinationPath,
+                    SourcePaths = SourceItems.Select(i => i.Path!).ToList()
+                };
+                PendingMoveManager.Save(pending);
+            }
+
             if (await AdminManager.EnsureAdmin(reason, actions))
             {
+                // If we just saved and relaunched, current process will shut down.
+                if (AdminManager.IsAdminGranted)
+            {
                 await MoveFiles();
+                }
             }
         }
 
@@ -340,7 +362,7 @@ namespace NeatShift.ViewModels
                                    "• Verify symbolic links after moving files\n" +
                                    "• Report any issues through Discord or Telegram\n\n" +
                                    "The software is provided 'as is', without warranty of any kind.\n\n" +
-                                   "© 2024 NeatShift",
+                                   $"{((System.Reflection.AssemblyCopyrightAttribute)System.Reflection.Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(System.Reflection.AssemblyCopyrightAttribute), false)[0]).Copyright}",
                             TextWrapping = TextWrapping.Wrap,
                             Margin = new Thickness(0, 0, 0, 10)
                         },
@@ -444,8 +466,13 @@ namespace NeatShift.ViewModels
 
         partial void OnStatusMessageChanged(string value)
         {
+            // Notify bound properties first
+            OnPropertyChanged(nameof(IsErrorStatus));
+            OnPropertyChanged(nameof(IsSuccessStatus));
+
             if (value == "Operation completed successfully")
             {
+                DetailedStatusMessage = string.Empty;
                 // If we're in the source directory, refresh it
                 if (_fileBrowserViewModel.CurrentPath == _sourceDirectory)
                 {
@@ -453,6 +480,10 @@ namespace NeatShift.ViewModels
                 }
                 // Clear the source directory after operation completes
                 _sourceDirectory = string.Empty;
+            }
+            else if (IsErrorStatus)
+            {
+                DetailedStatusMessage = value;
             }
         }
 
@@ -556,7 +587,10 @@ namespace NeatShift.ViewModels
                 }
                 else
                 {
+                    if (!StatusMessage.StartsWith("Error", StringComparison.OrdinalIgnoreCase))
+                {
                     StatusMessage = "Operation failed";
+                    }
                     ProgressValue = 0;
                 }
             }
@@ -599,6 +633,30 @@ namespace NeatShift.ViewModels
                 }
                 
                 _settingsService.SaveSettings(settings);
+            }
+        }
+
+        [RelayCommand]
+        private void OpenLogsFolder()
+        {
+            string logDir = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData), "NeatShift", "logs");
+            if (System.IO.Directory.Exists(logDir))
+            {
+                System.Diagnostics.Process.Start("explorer.exe", logDir);
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("No log files have been generated yet.", "Information", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+            }
+        }
+
+        [RelayCommand]
+        private void ShowErrorDetails()
+        {
+            if (IsErrorStatus && !string.IsNullOrWhiteSpace(DetailedStatusMessage))
+            {
+                var dialog = new ErrorDetailsDialog(DetailedStatusMessage);
+                dialog.ShowDialog();
             }
         }
     }

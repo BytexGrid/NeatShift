@@ -21,6 +21,7 @@ using System.Diagnostics;
 using NeatShift.Models;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace NeatShift.Services
 {
@@ -183,7 +184,7 @@ namespace NeatShift.Services
                     {
                         FileName = "powershell.exe",
                         Arguments = $@"-Command ""& {{
-                            Enable-ComputerRestore -Drive 'C:\';
+                            Enable-ComputerRestore -Drive '{Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System))}';
                             Checkpoint-Computer -Description '{description}' -RestorePointType 'MODIFY_SETTINGS'
                         }}""",
                         UseShellExecute = false,

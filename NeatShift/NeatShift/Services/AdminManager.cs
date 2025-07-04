@@ -42,6 +42,7 @@ namespace NeatShift.Services
                 {
                     UseShellExecute = true,
                     FileName = Process.GetCurrentProcess().MainModule?.FileName,
+                    Arguments = "--resume",
                     Verb = "runas"
                 };
 

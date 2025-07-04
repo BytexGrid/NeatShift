@@ -91,6 +91,7 @@ namespace NeatShift.Services
                         1314 => "The client does not have the required privileges",
                         _ => $"Failed to create symbolic link (Error code: {errorCode})"
                     };
+                    AppLogger.Log($"CreateSymbolicLink failed. Code={errorCode} Path={linkPath} Target={targetPath}");
                     return (false, errorMessage);
                 }
 
@@ -355,6 +356,25 @@ namespace NeatShift.Services
                 }
             }
             throw new IOException($"Failed to delete file after {retries} attempts");
+        }
+
+        public static void CopyDirectoryRecursive(string sourceDir, string destinationDir)
+        {
+            Directory.CreateDirectory(destinationDir);
+
+            // Copy files
+            foreach (var filePath in Directory.GetFiles(sourceDir))
+            {
+                var destFile = Path.Combine(destinationDir, Path.GetFileName(filePath));
+                File.Copy(filePath, destFile, overwrite: true);
+            }
+
+            // Copy subdirectories
+            foreach (var dirPath in Directory.GetDirectories(sourceDir))
+            {
+                var destSubDir = Path.Combine(destinationDir, Path.GetFileName(dirPath));
+                CopyDirectoryRecursive(dirPath, destSubDir);
+            }
         }
     }
 } 

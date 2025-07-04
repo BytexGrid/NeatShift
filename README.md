@@ -1,15 +1,15 @@
 <div align="center">
   <img src="icon.ico" alt="NeatShift Logo" width="128" height="128">
   <h1>NeatShift</h1>
-  <p>Keep your files organized, without losing track of them </p>
+  <p>Relocate files and folders without breaking application paths.</p>
 </div>
 
 <p align="center">
   <a href="https://github.com/BytexGrid/NeatShift/wiki">📚 Learn More</a> •
   <a href="https://apps.microsoft.com/store/detail/9NHF5VVHDCGZ">🏪 Microsoft Store</a> •
   <a href="https://github.com/BytexGrid/NeatShift/releases">📦 Download</a> •
-  <a href="https://github.com/BytexGrid/NeatShift/issues">🐛 Found a Bug?</a> •
-  <a href="https://github.com/BytexGrid/NeatShift/issues">💡 Share Ideas</a>
+  <a href="https://github.com/BytexGrid/NeatShift/issues">🐛 Report a Bug</a> •
+  <a href="https://github.com/BytexGrid/NeatShift/issues">💡 Request a Feature</a>
 </p>
 
 <div align="center">
@@ -19,7 +19,7 @@
 ![GitHub](https://img.shields.io/github/license/BytexGrid/NeatShift)
 ![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)
 
-<h2> Available on Microsoft Store!</h2>
+<h2> Available on Microsoft Store</h2>
 
 <a href="https://apps.microsoft.com/store/detail/9NHF5VVHDCGZ?cid=DevShareMCLPCB">
   <img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Get it from Microsoft" />
@@ -34,34 +34,16 @@
 
 </div>
 
-Hey there!  Ever get frustrated with messy files scattered across your PC? Let me explain what NeatShift does with a real example:
+NeatShift is a Windows utility designed to solve a common problem: moving large applications, games, or folders to a different drive without breaking the shortcuts and application paths that depend on them.
 
-Imagine you have:
-- Games in `C:\Games` (eating up your SSD space)
-- Documents in `C:\Users\You\Documents` (getting cluttered)
-- Downloads everywhere
+When a program is installed, its location is registered with the operating system. Simply moving the folder to a new drive will cause the program to stop working. NeatShift provides a robust solution by relocating the folder and then creating a **Symbolic Link** in its original place. This link is a powerful type of shortcut that is transparent to the operating system, redirecting any request from the old path to the new location seamlessly.
 
-You want to move those huge game folders to your bigger HDD, but:
-- Steam won't find the games anymore
-- Shortcuts break
-- File paths in your apps stop working
+### Common Use Cases:
+*   **Free Up SSD Space:** Move large game installations (e.g., from Steam or Epic Games) from a primary solid-state drive to a larger hard drive without needing to reinstall them.
+*   **Centralize Data:** Consolidate project files, documents, or media libraries onto a network-attached storage (NAS) or secondary drive while maintaining their original, accessible paths.
+*   **System Organization:** Reorganize the directory structure of a development environment or user profile without disrupting dependencies or breaking build scripts.
 
-**That's where NeatShift comes in!** 
-
-It lets you:
-1. Move those big game folders to `D:\Games`
-2. Creates magical links so everything still works
-3. Your PC thinks the files haven't moved at all!
-
-Real-world uses:
-- Move games to a different drive without breaking Steam
-- Organize documents while keeping shortcuts working
-- Clean up your SSD without breaking anything
-- Keep your files organized YOUR way
-
-Think of it like creating shortcuts, but WAY more powerful - apps can't even tell the files moved! 
-
-> **Note**: English isn't my first language, so you might spot some quirks in the documentation. Feel free to suggest improvements!
+NeatShift automates the process of moving data and creating these links through a clean, modern interface, with built-in safety features like System Restore point creation.
 
 ##  See It In Action
 

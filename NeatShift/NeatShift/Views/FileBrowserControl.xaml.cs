@@ -6,13 +6,14 @@ using NeatShift.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using System.Windows.Data;
+using System.Threading.Tasks;
 
 namespace NeatShift.Views
 {
     public partial class FileBrowserControl : UserControl
     {
         private Point _startPoint;
-        private FileBrowserViewModel ViewModel => (FileBrowserViewModel)DataContext;
+        private FileBrowserViewModel? ViewModel => DataContext as FileBrowserViewModel;
 
         public FileBrowserControl()
         {
@@ -23,14 +24,44 @@ namespace NeatShift.Views
             FileListView.PreviewMouseLeftButtonDown += FileListView_PreviewMouseLeftButtonDown;
             FileListView.PreviewMouseMove += FileListView_PreviewMouseMove;
             FileListView.PreviewMouseLeftButtonUp += FileListView_PreviewMouseLeftButtonUp;
+            FileListView.Drop += FileListView_Drop;
+            FileListView.DragEnter += FileListView_DragEnter;
 
             // Add key handlers to both views
             FileListView.PreviewKeyDown += ListView_KeyDown;
             this.PreviewKeyDown += ListView_KeyDown; // Handle keys at UserControl level
+
+            PathTextBox.LostFocus += PathTextBox_LostFocus;
         }
 
-        private void FileListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void FileListView_Drop(object sender, DragEventArgs e)
         {
+            // Placeholder for future implementation
+        }
+
+        private void FileListView_DragEnter(object sender, DragEventArgs e)
+        {
+            // Placeholder for future implementation
+        }
+
+        private void FileBrowserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.Initialize();
+        }
+
+        private async void FileListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!Services.AdminManager.IsAdminGranted)
+            {
+                var (reason, actions) = NeatShift.Services.AdminManager.Messages.SymbolicLink;
+                bool granted = await NeatShift.Services.AdminManager.EnsureAdmin(reason, actions);
+                if (!granted)
+                {
+                    // user cancelled; abort drag initiate
+                    return;
+                }
+                // App will relaunch if granted, so this process ends
+            }
             _startPoint = e.GetPosition(null);
         }
 
@@ -198,6 +229,11 @@ namespace NeatShift.Views
             {
                 ViewModel.SelectAll();
             }
+        }
+
+        private void PathTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.HandlePathLostFocus();
         }
     }
 } 

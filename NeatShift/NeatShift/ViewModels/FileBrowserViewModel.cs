@@ -19,6 +19,7 @@ namespace NeatShift.ViewModels
         private readonly ObservableCollection<string> _recentLocations = new();
         private const int MAX_RECENT_LOCATIONS = 10;
         private readonly IRecentLocationsService _recentLocationsService;
+        private bool _isInitialized = false;
 
         [ObservableProperty]
         private string _currentPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
@@ -60,19 +61,26 @@ namespace NeatShift.ViewModels
         public FileBrowserViewModel(IRecentLocationsService recentLocationsService)
         {
             _recentLocationsService = recentLocationsService;
-            LoadItems(_currentPath);
             UpdatePathSegments();
             SelectedItems.CollectionChanged += (s, e) =>
             {
                 System.Diagnostics.Debug.WriteLine($"Selected items count: {SelectedItems.Count}");
             };
+        }
 
-            // Load saved recent locations
+        public void Initialize()
+        {
+            if (_isInitialized) return;
+
+            LoadItems(CurrentPath);
+
             var savedLocations = _recentLocationsService.LoadRecentLocations();
             foreach (var location in savedLocations.Take(MAX_RECENT_LOCATIONS))
             {
                 _recentLocations.Add(location);
             }
+
+            _isInitialized = true;
         }
 
         private void UpdatePathSegments()
@@ -106,6 +114,15 @@ namespace NeatShift.ViewModels
 
                 foreach (var segment in segments)
                     PathSegments.Add(segment);
+            }
+        }
+
+        [RelayCommand]
+        private void Refresh()
+        {
+            if (!string.IsNullOrEmpty(CurrentPath))
+            {
+                LoadItems(CurrentPath);
             }
         }
 
@@ -196,7 +213,7 @@ namespace NeatShift.ViewModels
         [RelayCommand]
         private void NavigateBack()
         {
-            if (!_backStack.Any()) return;
+            if (!_backStack.Any() || string.IsNullOrEmpty(CurrentPath)) return;
             _forwardStack.Push(CurrentPath);
             LoadItems(_backStack.Pop());
         }
@@ -204,7 +221,7 @@ namespace NeatShift.ViewModels
         [RelayCommand]
         private void NavigateForward()
         {
-            if (!_forwardStack.Any()) return;
+            if (!_forwardStack.Any() || string.IsNullOrEmpty(CurrentPath)) return;
             _backStack.Push(CurrentPath);
             LoadItems(_forwardStack.Pop());
         }
@@ -212,6 +229,7 @@ namespace NeatShift.ViewModels
         [RelayCommand]
         private void NavigateUp()
         {
+            if (string.IsNullOrEmpty(CurrentPath)) return;
             var parent = Directory.GetParent(CurrentPath);
             if (parent != null)
             {
@@ -373,6 +391,15 @@ namespace NeatShift.ViewModels
                 CurrentPath = _originalPath;
                 IsEditingPath = false;
             }
+        }
+
+        public void HandlePathLostFocus()
+        {
+            if (string.IsNullOrWhiteSpace(CurrentPath) || !Directory.Exists(CurrentPath))
+            {
+                CurrentPath = _originalPath;
+            }
+            IsEditingPath = false;
         }
 
         private void LoadItems(string path)

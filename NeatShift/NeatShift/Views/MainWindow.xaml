@@ -92,6 +92,7 @@
                 <ui:CommandBar.SecondaryCommands>
                     <ui:AppBarButton Icon="Globe" Label="GitHub" Command="{Binding OpenGitHubCommand}" AutomationProperties.Name="GitHub"/>
                     <ui:AppBarButton Icon="Help" Label="About" Command="{Binding ShowAboutCommand}" AutomationProperties.Name="About"/>
+                    <ui:AppBarButton Icon="Paste" Label="Open Logs" Command="{Binding OpenLogsFolderCommand}" AutomationProperties.Name="Open Logs"/>
                 </ui:CommandBar.SecondaryCommands>
             </ui:CommandBar>
 
@@ -458,21 +459,49 @@
             </Grid>
 
             <!-- Status Bar -->
-            <Grid Grid.Row="2" Margin="0,20,0,0">
+            <Border Grid.Row="2" Margin="0,20,0,0" CornerRadius="4" Padding="8,4">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundAltHighBrush}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSuccessStatus}" Value="True">
+                                <Setter Property="Background" Value="#107C10"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsErrorStatus}" Value="True">
+                                <Setter Property="Background" Value="#E81123"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                
-                <TextBlock Text="{Binding StatusMessage}" 
-                         VerticalAlignment="Center"/>
-                
-                <ProgressBar Grid.Column="1" 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <ui:SymbolIcon Symbol="Accept"
+                                       Margin="0,0,6,0"
+                                       Foreground="White"
+                                       Visibility="{Binding IsSuccessStatus, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <ui:SymbolIcon Symbol="Stop"
+                                       Margin="0,0,6,0"
+                                       Foreground="White"
+                                       Visibility="{Binding IsErrorStatus, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center" Foreground="White"/>
+                    </StackPanel>
+                    <Button Grid.Column="1"
+                            Margin="8,0,0,0"
+                            Visibility="{Binding IsErrorStatus, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Content="Details"
+                            Command="{Binding ShowErrorDetailsCommand}"/>
+                    <ProgressBar Grid.Column="2"
                            Width="200" 
                            Height="2"
                            Value="{Binding ProgressValue}"
                            Visibility="{Binding IsOperationInProgress, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             </Grid>
+            </Border>
         </Grid>
     </Grid>
 </Window> 
